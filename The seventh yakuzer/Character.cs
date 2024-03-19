@@ -19,8 +19,9 @@ namespace The_seventh_yakuzer
         public int PM { get; private set; }
         public List<GameData.Status> Status { get; private set; }
         public Dictionary<string, int> StatDict { get; private set; }
+        public List<Attack> AttackList { get; private set; }
 
-        public Character(string name, string sprite, List<GameData.Type> type, int PV, int PM, int attack, int defense, int magic, int willpower, int agility)
+        public Character(string name, string sprite, List<GameData.Type> type, int PV, int PM, int attack, int defense, int magic, int willpower, int agility, List<Attack> attackList)
         {
             Name = name;
             Sprite = sprite;
@@ -38,6 +39,7 @@ namespace The_seventh_yakuzer
             PV = StatDict["PVMax"];
             PM = StatDict["PMMax"];
             Status = new List<GameData.Status>() { GameData.Status.GOOD };
+            AttackList = attackList;
         }
     }
 }

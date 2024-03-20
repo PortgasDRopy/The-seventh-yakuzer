@@ -11,17 +11,18 @@ namespace The_seventh_yakuzer
     {
         public string Name { get; private set; }
         public string Sprite { get; private set; }
-        public List<GameData.Type> Type { get; private set; }
+        public List<GameData.Type>? Type { get; private set; }
         public int Experience { get; private set; }
         public int Level { get; private set; }
         public int PV { get; private set; }
         public int PM { get; private set; }
         public List<GameData.Status> Status { get; private set; }
-        public Dictionary<string, int> StatDict { get; private set; }
-        public List<Attack> AttackList { get; private set; }
+        public Dictionary<string, int>? StatDict { get; private set; }
+        public List<Attack>? AttackList { get; private set; }
         public Weapon EquippedWeapon { get; private set; }
-        public List<WeaponType> possibleWeapon {  get; private set; }
-
+        public List<WeaponType>? possibleWeapon {  get; private set; }
+        public List<Character>? StyleList { get; private set; }
+        public Character EquippedStyle { get; private set; }
         public Character(string name, string sprite, List<GameData.Type> type, int PV, int PM, int attack, int defense, int magic, int willpower, int agility, List<Attack> attackList)
         {
             Name = name;
@@ -41,6 +42,21 @@ namespace The_seventh_yakuzer
             PM = StatDict["PMMax"];
             Status = new List<GameData.Status>() { GameData.Status.GOOD };
             AttackList = attackList;
+            StyleList = null;
+            EquippedStyle = this;
+        }
+
+        public Character(string name, string sprite, List<Character> styleList)
+        {
+            Name = name;
+            Sprite = sprite;
+            StyleList = styleList;
+            EquippedStyle = StyleList[0];
+            Status = new List<GameData.Status>() { GameData.Status.GOOD };
+            PV = EquippedStyle.StatDict["PVMax"];
+            PM = EquippedStyle.StatDict["PMMax"];
+            Experience = 0;
+            Level = 1;
         }
 
         public void LevelUp()

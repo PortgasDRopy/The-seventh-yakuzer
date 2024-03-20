@@ -42,5 +42,14 @@ namespace The_seventh_yakuzer
             Status = new List<GameData.Status>() { GameData.Status.GOOD };
             AttackList = attackList;
         }
+
+        public void LevelUp()
+        {
+            Level += 1;
+            foreach (var stat in StatDict)
+            {
+                StatDict[stat.Key] += 1;
+            }
+        }
     }
 }

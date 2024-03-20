@@ -58,6 +58,14 @@ namespace The_seventh_yakuzer
         public static List<Attack> MajimaBreakAttacks { get; } = new List<Attack>();
         public static List<Attack> MajimaLegendAttacks { get; } = new List<Attack>();
         public static List<Attack> LeeAttacks { get; } = new List<Attack>();
+        public static List<Attack> GoonBluntAttacks { get; } = new List<Attack>();
+        public static List<Attack> GoonBladeAttacks { get; } = new List<Attack>();
+        public static List<Attack> GoonGunAttacks { get; } = new List<Attack>();
+        public static List<Attack> BigGAttacks { get; } = new List<Attack>();
+        public static List<Attack> MageAttacks { get; } = new List<Attack>();
+        public static List<Attack> ArcherAttacks { get; } = new List<Attack>();
+        public static List<Attack> FighterAttacks { get; } = new List<Attack>();
+        public static List<Attack> WMasterAttacks { get; } = new List<Attack>();
         public static WeaponType PipesAndBatons { get; } = new WeaponType("Pipes and Batons", "", Type.BLUNT, Weight.MEDIUM);
         public static WeaponType Umbrellas { get; } = new WeaponType("Umbrellas", "", Type.MAGIC, Weight.MEDIUM);
         public static WeaponType Blackjacks { get; } = new WeaponType("Blackjacks", "", Type.BLUNT, Weight.LIGHT);

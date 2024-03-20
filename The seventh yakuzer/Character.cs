@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using The_seventh_yakuzer;
 
 namespace The_seventh_yakuzer
 {
@@ -20,6 +19,8 @@ namespace The_seventh_yakuzer
         public List<GameData.Status> Status { get; private set; }
         public Dictionary<string, int> StatDict { get; private set; }
         public List<Attack> AttackList { get; private set; }
+        public Weapon EquippedWeapon { get; private set; }
+        public List<WeaponType> possibleWeapon {  get; private set; }
 
         public Character(string name, string sprite, List<GameData.Type> type, int PV, int PM, int attack, int defense, int magic, int willpower, int agility, List<Attack> attackList)
         {

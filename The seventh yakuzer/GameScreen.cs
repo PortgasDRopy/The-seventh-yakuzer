@@ -11,6 +11,7 @@ namespace The_seventh_yakuzer
         public string[,] MapMap { get; private set; } = new string[5, 8];
         public string[,] MenuTab { get; private set; } = new string[56, 30];
         public string[,] SpritesTab { get; private set; } = new string[56, 30];
+        public string[,] _kiryuSprite = new string[10, 10];
 
         public string _line;
         public int _kiryuPosX;
@@ -156,7 +157,8 @@ namespace The_seventh_yakuzer
             switch (dir) 
             { 
                 case "Up":
-
+                    Console.SetCursorPosition(cLPos - 1, cTPos - 2);
+                    
                     uCLPos = cLPos - 1;
                     uCTPos = cTPos - 2;
 
@@ -165,16 +167,16 @@ namespace The_seventh_yakuzer
                         if (grid[_kiryuPosX, _kiryuPosY - 2].isWall == false)
                         {
                             Console.SetCursorPosition(uCLPos, cTPos);
-                            Console.Write(' ');
+                        Console.Write(' ');
                             Console.SetCursorPosition(uCLPos, uCTPos);
-                            Console.Write('K');
+                        Console.Write('K');
                             grid[_kiryuPosX, _kiryuPosY].isKiryu = false;
                             grid[_kiryuPosX, _kiryuPosY - 2].isKiryu = true;
                             _kiryuPosY -= 2;
                             break;
-                        }
                     }
-
+                    }
+                    
                     if (_kiryuPosY >= 1)
                     {
                         if (grid[_kiryuPosX, _kiryuPosY - 1].isWall == false)
@@ -186,10 +188,10 @@ namespace The_seventh_yakuzer
                             grid[_kiryuPosX, _kiryuPosY].isKiryu = false;
                             grid[_kiryuPosX, _kiryuPosY - 1].isKiryu = true;
                             _kiryuPosY -= 1;
-                            break;
+                    break;
                         }
                     }
-                   
+
                     Console.SetCursorPosition(cLPos, cTPos);
 
                     break;
@@ -246,32 +248,32 @@ namespace The_seventh_yakuzer
                     {
                         if (grid[_kiryuPosX - 3, _kiryuPosY].isWall == false && cLPos >= 31)
                         {
-                            Console.SetCursorPosition(cLPos - 1, cTPos);
-                            Console.Write(' ');
+                    Console.SetCursorPosition(cLPos - 1, cTPos);
+                    Console.Write(' ');
                             Console.SetCursorPosition(uCLPos, cTPos);
-                            Console.Write('K');
+                    Console.Write('K');
                             grid[_kiryuPosX, _kiryuPosY].isKiryu = false;
                             grid[_kiryuPosX - 3, _kiryuPosY].isKiryu = true;
                             _kiryuPosX -= 3;
-                            break;
+                    break;
                         }
                     }
 
                     if (_kiryuPosX >= 1)
                     {
                         if (grid[_kiryuPosX - 1, _kiryuPosY].isWall == false)
-                        {
-                            Console.SetCursorPosition(cLPos - 1, cTPos);
-                            Console.Write(' ');
+                    {
+                        Console.SetCursorPosition(cLPos - 1, cTPos);
+                        Console.Write(' ');
                             Console.SetCursorPosition(uCLPos + 2, cTPos);
-                            Console.Write('K');
+                        Console.Write('K');
                             grid[_kiryuPosX, _kiryuPosY].isKiryu = false;
                             grid[_kiryuPosX - 1, _kiryuPosY].isKiryu = true;
                             _kiryuPosX -= 1;
                             break;
                         }
                     }
-
+                    
                     Console.SetCursorPosition(cLPos, cTPos);
 
                     break;
@@ -302,10 +304,10 @@ namespace The_seventh_yakuzer
                     {
                          if (grid[_kiryuPosX + 1, _kiryuPosY].isWall == false && cLPos <= Console.BufferWidth - 30)
                         {
-                            Console.SetCursorPosition(cLPos - 1, cTPos);
-                            Console.Write(' ');
+                    Console.SetCursorPosition(cLPos - 1, cTPos);
+                    Console.Write(' ');
                             Console.SetCursorPosition(uCLPos - 2, cTPos);
-                            Console.Write('K');
+                    Console.Write('K');
                             grid[_kiryuPosX, _kiryuPosY].isKiryu = false;
                             grid[_kiryuPosX + 1, _kiryuPosY].isKiryu = true;
                             _kiryuPosX += 1;

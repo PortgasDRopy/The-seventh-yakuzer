@@ -6,77 +6,69 @@ using System.Threading.Tasks;
 
 namespace The_seventh_yakuzer
 {
-    internal class GoonBlunt
+    internal class GoonBlunt : Character
     {
-        public Character Char { get; private set; }
         public GoonBlunt(string name, int level)
+            :base(name, "", new List<GameData.Type> { GameData.Type.BLUNT }, 0, 0, 0, 0, 0, 0, 0, GameData.GoonBluntAttacks, null, null)
         {
-            Char = new Character(name, "", new List<GameData.Type> { GameData.Type.BLUNT }, 0, 0, 0, 0, 0, 0, 0, GameData.GoonBluntAttacks);
-            for (int i = 1; i < level; i++) { Char.LevelUp(); }
+            for (int i = 1; i < level; i++) { LevelUp(); }
         }
     }
 
-    internal class GoonBlade
-    {
-        public Character Char { get; private set; }
+    internal class GoonBlade : Character
+    {   
         public GoonBlade(string name, int level)
+            :base(name, "", new List<GameData.Type> { GameData.Type.BLADE }, 0, 0, 0, 0, 0, 0, 0, GameData.GoonBladeAttacks, null, null)
         {
-            Char = new Character(name, "", new List<GameData.Type> { GameData.Type.BLADE }, 0, 0, 0, 0, 0, 0, 0, GameData.GoonBladeAttacks);
-            for (int i = 1; i < level; i++) { Char.LevelUp(); }
+            for (int i = 1; i < level; i++) { LevelUp(); }
         }
     }
-    internal class GoonGun
+    internal class GoonGun : Character
     {
-        public Character Char { get; private set; }
         public GoonGun(string name, int level)
+            : base(name, "", new List<GameData.Type> { GameData.Type.GUN, GameData.Type.MAGIC }, 0, 0, 0, 0, 0, 0, 0, GameData.GoonGunAttacks, null, null)
         {
-            Char = new Character(name, "", new List<GameData.Type> { GameData.Type.GUN, GameData.Type.MAGIC }, 0, 0, 0, 0, 0, 0, 0, GameData.GoonGunAttacks);
-            for (int i = 1; i < level; i++) { Char.LevelUp(); }
+            for (int i = 1; i < level; i++) { LevelUp(); }
         }
     }
-    internal class BigG
+    internal class BigG : Character
     {
-        public Character Char { get; private set; }
         public BigG(string name, int level)
+            : base(name, "", new List<GameData.Type> { GameData.Type.ICE, GameData.Type.GUN }, 0, 0, 0, 0, 0, 0, 0, GameData.BigGAttacks, null, null)
         {
-            Char = new Character(name, "", new List<GameData.Type> { GameData.Type.ICE, GameData.Type.GUN }, 0, 0, 0, 0, 0, 0, 0, GameData.BigGAttacks);
-            for (int i = 1; i < level; i++) { Char.LevelUp(); }
+            for (int i = 1; i < level; i++) { LevelUp(); }
         }
     }
-    internal class Mage
+    internal class Mage : Character
     {
-        public Character Char { get; private set; }
         public Mage(string name, int level)
+            :base(name, "", new List<GameData.Type> { GameData.Type.MAGIC, GameData.Type.ELEC }, 0, 0, 0, 0, 0, 0, 0, GameData.MageAttacks, null, null)
         {
-            Char = new Character(name, "", new List<GameData.Type> { GameData.Type.MAGIC, GameData.Type.ELEC }, 0, 0, 0, 0, 0, 0, 0, GameData.MageAttacks);
-            for (int i = 1; i < level; i++) { Char.LevelUp(); }
+            for (int i = 1; i < level; i++) { LevelUp(); }
         }
     }
-    internal class Archer
+    internal class Archer : Character
     {
-        public Character Char { get; private set; }
         public Archer(string name, int level)
+            : base(name, "", new List<GameData.Type> { GameData.Type.GUN, GameData.Type.FIRE }, 0, 0, 0, 0, 0, 0, 0, GameData.ArcherAttacks, null, null)
         {
-            Char = new Character(name, "", new List<GameData.Type> { GameData.Type.GUN, GameData.Type.FIRE }, 0, 0, 0, 0, 0, 0, 0, GameData.ArcherAttacks);
-            for (int i = 1; i < level; i++) { Char.LevelUp(); }
+            for (int i = 1; i < level; i++) { LevelUp(); }
         }
     }
-    internal class Fighter
+    internal class Fighter : Character
     {
-        public Character Char { get; private set; }
         public Fighter(string name, int level)
+            : base(name, "", new List<GameData.Type> { GameData.Type.BLUNT, GameData.Type.ICE }, 0, 0, 0, 0, 0, 0, 0, GameData.FighterAttacks, null, null)
         {
-            Char = new Character(name, "", new List<GameData.Type> { GameData.Type.BLUNT, GameData.Type.ICE }, 0, 0, 0, 0, 0, 0, 0, GameData.FighterAttacks);
-            for (int i = 1; i < level; i++) { Char.LevelUp(); }
+            for (int i = 1; i < level; i++) { LevelUp(); }
         }
     }
-    internal class WMaster
+    internal class WMaster : Character
     {
-        public Character Char { get; private set; }
         public WMaster(string name, int level)
+            : base(name, "", new List<GameData.Type> { GameData.Type.GUN, GameData.Type.BLADE }, 0, 0, 0, 0, 0, 0, 0, GameData.WMasterAttacks, null, null)
         {
-            Char = new Character(name, "", new List<GameData.Type> { GameData.Type.GUN, GameData.Type.BLADE }, 0, 0, 0, 0, 0, 0, 0, GameData.WMasterAttacks);
-            for (int i = 1; i < level; i++) { Char.LevelUp(); }
+            for (int i = 1; i < level; i++) { LevelUp(); }
         }
     }
 }

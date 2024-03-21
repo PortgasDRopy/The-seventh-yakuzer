@@ -20,17 +20,19 @@ namespace The_seventh_yakuzer
         public Dictionary<string, int>? StatDict { get; private set; }
         public List<Attack>? AttackList { get; private set; }
         public Weapon EquippedWeapon { get; private set; }
-        public List<WeaponType>? possibleWeapon {  get; private set; }
+        public List<WeaponType>? PossibleWeapon {  get; private set; }
         public List<Character>? StyleList { get; private set; }
         public Character EquippedStyle { get; private set; }
-        public Character(string name, string sprite, List<GameData.Type> type, int PV, int PM, int attack, int defense, int magic, int willpower, int agility, List<Attack> attackList)
+        public List<Armor> EquippedArmor { get; private set; }
+        public List<Gear> EquippedGears { get; private set; }
+        public Character(string name, string sprite, List<GameData.Type> type, int PV, int PM, int attack, int defense, int magic, int willpower, int agility, List<Attack> attackList, List<WeaponType>? possibleWeapon, Weapon? defaultWeapon)
         {
             Name = name;
             Sprite = sprite;
             Type = type;
             StatDict = GameData.StatDictDefault;
-            StatDict["PVMax"] = PV;
-            StatDict["PMMax"] = PM;
+            StatDict["PV"] = PV;
+            StatDict["PM"] = PM;
             StatDict["Attack"] = attack;
             StatDict["Defense"] = defense;
             StatDict["Magic"] = magic;
@@ -38,12 +40,23 @@ namespace The_seventh_yakuzer
             StatDict["Agility"] = agility;
             Experience = 0;
             Level = 1;
-            PV = StatDict["PVMax"];
-            PM = StatDict["PMMax"];
-            Status = new List<GameData.Status>() { GameData.Status.GOOD };
+            PV = StatDict["PV"];
+            PM = StatDict["PM"];
+            Status = new List<GameData.Status>();
             AttackList = attackList;
             StyleList = null;
             EquippedStyle = this;
+            PossibleWeapon = possibleWeapon;
+            if (defaultWeapon == null)
+            {
+                EquippedWeapon = GameData.Unarmed;
+            }
+            else
+            {
+                EquippedWeapon = defaultWeapon;
+            }
+            EquippedArmor = new List<Armor>();
+            EquippedGears = new List<Gear>();
         }
 
         public Character(string name, string sprite, List<Character> styleList)
@@ -52,17 +65,20 @@ namespace The_seventh_yakuzer
             Sprite = sprite;
             StyleList = styleList;
             EquippedStyle = StyleList[0];
-            Status = new List<GameData.Status>() { GameData.Status.GOOD };
-            PV = EquippedStyle.StatDict["PVMax"];
-            PM = EquippedStyle.StatDict["PMMax"];
+            Status = new List<GameData.Status>();
+            PV = EquippedStyle.StatDict["PV"];
+            PM = EquippedStyle.StatDict["PM"];
             Experience = 0;
             Level = 1;
+            EquippedArmor = new List<Armor>();
+            EquippedGears = new List<Gear>();
+            EquippedWeapon = EquippedStyle.EquippedWeapon;
         }
 
         public void LevelUp()
         {
             Level += 1;
-            foreach (var stat in StatDict)
+            foreach (var stat in EquippedStyle.StatDict)
             {
                 StatDict[stat.Key] += 1;
             }

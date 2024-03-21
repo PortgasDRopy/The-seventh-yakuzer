@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,20 +6,16 @@ using System.Threading.Tasks;
 
 namespace The_seventh_yakuzer
 {
-    internal class Weapon : Item
+    internal class Gear : Item
     {
         public int Rarity { get; private set; }
-        public WeaponType WeaponType { get; private set; }
-        public GameData.Type? Type { get; private set; }
-        public List<string>? EffectList { get; private set; }
+        public List<string> EffectList { get; private set; }
         public Dictionary<string, int> StatDict { get; private set; }
-        public Weapon(string name, string sprite, int rarity, WeaponType weapontype, GameData.Type? type, List<string>? effectlist, int PV, int PM, int attack, int defense, int magic, int willpower, int agility)
+        public Gear(string name, string sprite, int rarity, List<string> effectList, int PV, int PM, int attack, int defense, int magic, int willpower, int agility)
             : base(name, sprite)
-        { 
+        {
             Rarity = rarity;
-            WeaponType = weapontype;
-            Type = type;
-            EffectList = effectlist;
+            EffectList = effectList;
             StatDict = GameData.StatDictDefault;
             StatDict["PV"] = PV;
             StatDict["PM"] = PM;

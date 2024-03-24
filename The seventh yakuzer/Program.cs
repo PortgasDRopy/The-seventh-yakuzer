@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -21,11 +23,14 @@ namespace The_seventh_yakuzer
         {
             GameModes gMode = GameModes.MAP;
 
+            List<Character> Party = new List<Character>() { GameData.KiryuBrawl, GameData.Nishiki, GameData.Kuze };
+
             bool game = true;
             int currentMapX = 0;
             int currentMapY = 0;
 
             Console.SetWindowPosition(0, 0);
+            Console.CursorVisible = false;
 
             GameScreen gs = new GameScreen();
 
@@ -100,7 +105,10 @@ namespace The_seventh_yakuzer
 
                         case ConsoleKey.D7:
                             gMode = GameModes.FIGHT;
-                            gs.SetFightUI();
+                            gs.SetFightUI(Party);
+                            gs._cursorPosX = 0;
+                            gs._cursorPosY = 0;
+                            gs._selectMode = 0;
                             break;
 
                         case ConsoleKey.D8:
@@ -116,34 +124,61 @@ namespace The_seventh_yakuzer
 
                 while (gMode == GameModes.FIGHT)
                 {
+
+                    string dir;
+
                     switch (Console.ReadKey(true).Key)
                     {
 
                         case ConsoleKey.Enter:
+                            gs.SelectHover(ConsoleColor.DarkBlue);
+                            gs.SelectOption(Party);
+                            break;
+
+                        case ConsoleKey.Escape:
+                            gs._selectMode = 0;
+                            gs.SelectHover(ConsoleColor.Blue);
+                            gs.SetFightUI(Party);
                             break;
 
                         case ConsoleKey.UpArrow:
+                            dir = "u";
+                            gs.MoveCursor(dir);
                             break;
 
                         case ConsoleKey.W:
+                            dir = "u";
+                            gs.MoveCursor(dir);
                             break;
 
                         case ConsoleKey.DownArrow:
+                            dir = "d";
+                            gs.MoveCursor(dir);
                             break;
 
                         case ConsoleKey.S:
+                            dir = "d";
+                            gs.MoveCursor(dir);
                             break;
 
                         case ConsoleKey.LeftArrow:
+                            dir = "l";
+                            gs.MoveCursor(dir);
                             break;
 
                         case ConsoleKey.A:
+                            dir = "l";
+                            gs.MoveCursor(dir);
                             break;
 
                         case ConsoleKey.RightArrow:
+                            dir = "r";
+                            gs.MoveCursor(dir);
                             break;
 
                         case ConsoleKey.D:
+                            dir = "r";
+                            gs.MoveCursor(dir);
                             break;
 
                         case ConsoleKey.D1:
@@ -168,11 +203,12 @@ namespace The_seventh_yakuzer
 
                         case ConsoleKey.D7:
                             gMode = GameModes.FIGHT;
-                            gs.SetFightUI();
+                            Console.Clear();
+                            gs.SetFightUI(Party);
                             break;
 
                         case ConsoleKey.D8:
-                            gMode = GameModes.DIALOG;
+                            //gMode = GameModes.DIALOG;
                             break;
 
                         case ConsoleKey.D9:
@@ -181,9 +217,11 @@ namespace The_seventh_yakuzer
                             gs.SetMenuTab();
                             gs.SetSpritesTab();
                             gs.SetMapTab(currentMapX, currentMapY);
-                            gs.InitKiryu(gs._kiryuPosX, gs._kiryuPosY);
+                            gs.InitKiryu(gs._kiryuPosX - 1, gs._kiryuPosY);
                             break;
                     }
+
+
                 }
 
                 while (gMode == GameModes.DIALOG)

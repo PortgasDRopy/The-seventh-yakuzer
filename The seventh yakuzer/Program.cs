@@ -131,54 +131,56 @@ namespace The_seventh_yakuzer
                     {
 
                         case ConsoleKey.Enter:
-                            gs.SelectHover(ConsoleColor.DarkBlue);
+                            gs.SelectHover(ConsoleColor.DarkBlue, Party);
                             gs.SelectOption(Party);
                             break;
 
                         case ConsoleKey.Escape:
+                            gs._cursorPosX = gs._prevCurX;
+                            gs._cursorPosY = gs._prevCurY;
                             gs._selectMode = 0;
-                            gs.SelectHover(ConsoleColor.Blue);
+                            gs.SelectHover(ConsoleColor.Blue, Party);
                             gs.SetFightUI(Party);
                             break;
 
                         case ConsoleKey.UpArrow:
                             dir = "u";
-                            gs.MoveCursor(dir);
+                            gs.MoveCursor(dir, Party);
                             break;
 
                         case ConsoleKey.W:
                             dir = "u";
-                            gs.MoveCursor(dir);
+                            gs.MoveCursor(dir, Party);
                             break;
 
                         case ConsoleKey.DownArrow:
                             dir = "d";
-                            gs.MoveCursor(dir);
+                            gs.MoveCursor(dir, Party);
                             break;
 
                         case ConsoleKey.S:
                             dir = "d";
-                            gs.MoveCursor(dir);
+                            gs.MoveCursor(dir, Party);
                             break;
 
                         case ConsoleKey.LeftArrow:
                             dir = "l";
-                            gs.MoveCursor(dir);
+                            gs.MoveCursor(dir, Party);
                             break;
 
                         case ConsoleKey.A:
                             dir = "l";
-                            gs.MoveCursor(dir);
+                            gs.MoveCursor(dir, Party);
                             break;
 
                         case ConsoleKey.RightArrow:
                             dir = "r";
-                            gs.MoveCursor(dir);
+                            gs.MoveCursor(dir, Party);
                             break;
 
                         case ConsoleKey.D:
                             dir = "r";
-                            gs.MoveCursor(dir);
+                            gs.MoveCursor(dir, Party);
                             break;
 
                         case ConsoleKey.D1:

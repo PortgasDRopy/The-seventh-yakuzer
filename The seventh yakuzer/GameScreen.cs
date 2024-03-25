@@ -22,6 +22,10 @@ namespace The_seventh_yakuzer
         //In the Party Submenu, Y = +1
         public int _cursorPosX;
         public int _cursorPosY;
+        public int _prevCurX;
+        public int _prevCurY;
+
+        public string _curSMenu;
 
         //_selectMode 0 -> Only on the X axis, 0-4 : Fight Menu
         //_selectMode 1 -> Only on the Y axis, 0-3 : Party Submenu
@@ -380,14 +384,17 @@ namespace The_seventh_yakuzer
             Console.Write("Status : ");
             Console.Write(curPlStt);
 
-            SelectHover(ConsoleColor.Blue);
+            SelectHover(ConsoleColor.Blue, Party);
         }
 
         public void SetSubmenu(string sMenu, List<Character> Party)
         {
-            if (sMenu == "skills" || sMenu == "items")
+            if (sMenu == "skills" || sMenu == "items" || sMenu == "party")
             {
-                int curX = 37;
+                int curX = 36;
+
+                _cursorPosY = 0; 
+                _cursorPosX = 0;
 
                 Console.SetCursorPosition(1, 46);
                 Console.Write("                                                                                                            ");
@@ -453,28 +460,42 @@ namespace The_seventh_yakuzer
 
                     case "items":
                         break;
+
+                    case "party":
+
+                        for (int i = 0; i < Party.Count; i++)
+                        {
+                            Console.SetCursorPosition(9, curX);
+                            Console.Write("-");
+                            Console.Write(Party[i].Name);
+
+                            curX += 3;
+                        }
+
+                        break;
                 }
 
             }
+
         }
 
-        public void MoveCursor(string dir)
+        public void MoveCursor(string dir, List<Character> Party)
         {
 
             if (dir == "r" && _selectMode != 1)
             {
                 if (_selectMode == 0 && _cursorPosX < 4) 
                 {
-                    SelectHover(ConsoleColor.Gray);
+                    SelectHover(ConsoleColor.Gray, Party);
                     _cursorPosX += 1;
-                    SelectHover(ConsoleColor.Blue);
+                    SelectHover(ConsoleColor.Blue, Party);
                 }
 
                 if (_selectMode == 2 && _cursorPosX < 1)
                 {
-                    SelectHover(ConsoleColor.Gray);
+                    SelectHover(ConsoleColor.Gray, Party);
                     _cursorPosX += 1;
-                    SelectHover(ConsoleColor.Blue);
+                    SelectHover(ConsoleColor.Blue, Party);
                 }
             }
 
@@ -482,16 +503,16 @@ namespace The_seventh_yakuzer
             {
                 if (_selectMode == 0 && _cursorPosX > 0)
                 {
-                    SelectHover(ConsoleColor.Gray);
+                    SelectHover(ConsoleColor.Gray, Party);
                     _cursorPosX -= 1;
-                    SelectHover(ConsoleColor.Blue);
+                    SelectHover(ConsoleColor.Blue, Party);
                 }
 
                 if (_selectMode == 2 && _cursorPosX > 0)
                 {
-                    SelectHover(ConsoleColor.Gray);
+                    SelectHover(ConsoleColor.Gray, Party);
                     _cursorPosX -= 1;
-                    SelectHover(ConsoleColor.Blue);
+                    SelectHover(ConsoleColor.Blue, Party);
                 }
             }
 
@@ -499,9 +520,9 @@ namespace The_seventh_yakuzer
             {
                 if (_cursorPosY > 0)
                 {
-                    SelectHover(ConsoleColor.Gray);
+                    SelectHover(ConsoleColor.Gray, Party);
                     _cursorPosY -= 1;
-                    SelectHover(ConsoleColor.Blue);
+                    SelectHover(ConsoleColor.Blue, Party);
                 }
             }
 
@@ -509,14 +530,14 @@ namespace The_seventh_yakuzer
             {
                 if (_cursorPosY < 3)
                 {
-                    SelectHover(ConsoleColor.Gray);
+                    SelectHover(ConsoleColor.Gray, Party);
                     _cursorPosY += 1;
-                    SelectHover(ConsoleColor.Blue);
+                    SelectHover(ConsoleColor.Blue, Party);
                 }
             }
         }
 
-        public void SelectHover(ConsoleColor color)
+        public void SelectHover(ConsoleColor color, List<Character> Party)
         {
             if (_selectMode == 0)
             {
@@ -616,12 +637,95 @@ namespace The_seventh_yakuzer
 
             if (_selectMode == 1)
             {
+                Console.SetCursorPosition(9, _cursorPosY * 3 + 36);
+                Console.ForegroundColor = color;
+                Console.Write('-');
+                Console.ForegroundColor = ConsoleColor.Gray;
+
+                //Stats
+                Console.SetCursorPosition(155, 36);
+                Console.Write("Stats:");
+                Console.SetCursorPosition(155, 38);
+                Console.Write("         ");
+                Console.SetCursorPosition(155, 38);
+
+                if (Party[_cursorPosY].Type.Count == 2)
+                {
+                    Console.Write(Party[_cursorPosY].Type[0]);
+                    Console.Write('/');
+                    Console.Write(Party[_cursorPosY].Type[1]);
+                }
+
+                if (Party[_cursorPosY].Type.Count == 1)
+                {
+                    Console.Write(Party[_cursorPosY].Type[0]);
+                }
+
+                Console.SetCursorPosition(155, 39);
+                Console.Write("          ");
+                Console.SetCursorPosition(155, 39);
+                Console.Write(Party[_cursorPosY].PV);
+                Console.Write('/');
+                int curPlHPM;
+                Party[0].StatDict.TryGetValue("PVMax", out curPlHPM);
+                Console.Write(curPlHPM);
+                Console.Write(" HP");
+
+                Console.SetCursorPosition(155, 40);
+                Console.Write("          ");
+                Console.SetCursorPosition(155, 40);
+                Console.Write(Party[_cursorPosY].PM);
+                Console.Write('/');
+                int curPlMPM;
+                Party[0].StatDict.TryGetValue("PMMax", out curPlMPM);
+                Console.Write(curPlMPM);
+                Console.Write(" MP");
+
+                Console.SetCursorPosition(155, 41);
+                Console.Write("          ");
+                Console.SetCursorPosition(155, 41);
+                Console.Write("Lvl ");
+                Console.Write(Party[_cursorPosY].Level);
+
+                Console.SetCursorPosition(155, 42);
+                Console.Write("          ");
+                Console.SetCursorPosition(155, 42);
+                Console.Write(Party[_cursorPosY].Status[0].ToString());
+
+                //Attacks
+                Console.SetCursorPosition(179, 36);
+                Console.Write("Attacks:");
+
+                int loopNb = 0;
+                int curX = 38;
+
+                for (int i = 0; Party[_cursorPosY].AttackList.Count > i; i++)
+                {
+                    Console.SetCursorPosition(179, curX);
+                    Console.Write("                       ");
+                    Console.SetCursorPosition(179, curX);
+                    Console.Write(Party[_cursorPosY].AttackList[i].Name);
+                    curX += 1;
+                    loopNb += 1;
+
+                    if (i == 7)
+                    {
+                        break;
+                    }
+                }
+
+                for (int i = loopNb; i < 8; i++)
+                {
+                    Console.SetCursorPosition(179, curX);
+                    Console.Write("                       ");
+                    curX += 1;
+                }
 
             }
 
             if (_selectMode == 2)
             {
-                Console.SetCursorPosition(_cursorPosX * 82 + 9, _cursorPosY * 3 + 37);
+                Console.SetCursorPosition(_cursorPosX * 82 + 9, _cursorPosY * 3 + 36);
                 Console.ForegroundColor = color;
                 Console.Write('-');
                 Console.ForegroundColor = ConsoleColor.Gray;
@@ -635,6 +739,9 @@ namespace The_seventh_yakuzer
             {
                 string sMenu;
 
+                _prevCurX = _cursorPosX;
+                _prevCurY = _cursorPosY;
+
                 //Skills + Items
                 if (_cursorPosX == 1 || _cursorPosX == 3)
                 {
@@ -645,11 +752,15 @@ namespace The_seventh_yakuzer
                         case 1:
                             sMenu = "skills";
                             SetSubmenu(sMenu, Party);
+                            SelectHover(ConsoleColor.Blue, Party);
+                            _curSMenu = sMenu;
                             break;
 
                         case 3:
                             sMenu = "items";
                             SetSubmenu(sMenu, Party);
+                            SelectHover(ConsoleColor.Blue, Party);
+                            _curSMenu = sMenu;
                             break;
                     }
                 }
@@ -658,6 +769,10 @@ namespace The_seventh_yakuzer
                 if (_cursorPosX == 2)
                 {
                     _selectMode = 1;
+                    sMenu = "party";
+                    SetSubmenu(sMenu, Party);
+                    SelectHover(ConsoleColor.Blue, Party);
+                    _curSMenu = sMenu;
                 }
             }
         }

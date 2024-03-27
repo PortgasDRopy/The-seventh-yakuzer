@@ -15,7 +15,7 @@ namespace The_seventh_yakuzer
         public int DmgMin {  get; private set; }
         public int DmgMax {  get; private set; }
         public int Precision {  get; private set; }
-        public List<string> EffectList {  get; private set; }
+        public List<string>? EffectList {  get; private set; }
 
         public Attack(string name, int requiredLevel, List<GameData.Type> type, int pMCost, int dmgMin, int dmgMax, int precision, List<string>? effectList)
         {

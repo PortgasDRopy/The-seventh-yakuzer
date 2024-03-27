@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
@@ -23,6 +23,7 @@ namespace The_seventh_yakuzer
         {
             GameModes gMode = GameModes.MAP;
 
+            GameData.SetWeaponList();
             List<Character> Party = new List<Character>() { GameData.KiryuBrawl, GameData.Nishiki, GameData.Kuze };
 
             bool game = true;

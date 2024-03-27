@@ -148,12 +148,16 @@ namespace The_seventh_yakuzer
                 _line = sr.ReadLine();
             }
 
+            sr.Close();
+
         }
 
         public void InitKiryu(int x, int y)
         {
             Console.SetCursorPosition(32 + x, y);
-            Console.Write("K");
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.Write('K');
+            Console.ForegroundColor = ConsoleColor.Gray;
             grid[x, y].isKiryu = true;
             _kiryuPosX = x + 1;
             _kiryuPosY = y;
@@ -181,7 +185,9 @@ namespace The_seventh_yakuzer
                             Console.SetCursorPosition(uCLPos, cTPos);
                             Console.Write(' ');
                             Console.SetCursorPosition(uCLPos, uCTPos);
+                            Console.ForegroundColor = ConsoleColor.DarkRed;
                             Console.Write('K');
+                            Console.ForegroundColor = ConsoleColor.Gray;
                             grid[_kiryuPosX, _kiryuPosY].isKiryu = false;
                             grid[_kiryuPosX, _kiryuPosY - 2].isKiryu = true;
                             _kiryuPosY -= 2;
@@ -196,7 +202,9 @@ namespace The_seventh_yakuzer
                             Console.SetCursorPosition(uCLPos, cTPos);
                             Console.Write(' ');
                             Console.SetCursorPosition(uCLPos, uCTPos + 1);
+                            Console.ForegroundColor = ConsoleColor.DarkRed;
                             Console.Write('K');
+                            Console.ForegroundColor = ConsoleColor.Gray;
                             grid[_kiryuPosX, _kiryuPosY].isKiryu = false;
                             grid[_kiryuPosX, _kiryuPosY - 1].isKiryu = true;
                             _kiryuPosY -= 1;
@@ -222,7 +230,9 @@ namespace The_seventh_yakuzer
                             Console.SetCursorPosition(uCLPos, cTPos);
                             Console.Write(' ');
                             Console.SetCursorPosition(uCLPos, uCTPos);
+                            Console.ForegroundColor = ConsoleColor.DarkRed;
                             Console.Write('K');
+                            Console.ForegroundColor = ConsoleColor.Gray;
                             grid[_kiryuPosX, _kiryuPosY].isKiryu = false;
                             grid[_kiryuPosX, _kiryuPosY + 2].isKiryu = true;
                             _kiryuPosY += 2;
@@ -237,7 +247,9 @@ namespace The_seventh_yakuzer
                             Console.SetCursorPosition(uCLPos, cTPos);
                             Console.Write(' ');
                             Console.SetCursorPosition(uCLPos, uCTPos - 1);
+                            Console.ForegroundColor = ConsoleColor.DarkRed;
                             Console.Write('K');
+                            Console.ForegroundColor = ConsoleColor.Gray;
                             grid[_kiryuPosX, _kiryuPosY].isKiryu = false;
                             grid[_kiryuPosX, _kiryuPosY + 1].isKiryu = true;
                             _kiryuPosY += 1;
@@ -263,7 +275,9 @@ namespace The_seventh_yakuzer
                             Console.SetCursorPosition(cLPos - 1, cTPos);
                             Console.Write(' ');
                             Console.SetCursorPosition(uCLPos, cTPos);
+                            Console.ForegroundColor = ConsoleColor.DarkRed;
                             Console.Write('K');
+                            Console.ForegroundColor = ConsoleColor.Gray;
                             grid[_kiryuPosX, _kiryuPosY].isKiryu = false;
                             grid[_kiryuPosX - 3, _kiryuPosY].isKiryu = true;
                             _kiryuPosX -= 3;
@@ -278,7 +292,9 @@ namespace The_seventh_yakuzer
                             Console.SetCursorPosition(cLPos - 1, cTPos);
                             Console.Write(' ');
                             Console.SetCursorPosition(uCLPos + 2, cTPos);
+                            Console.ForegroundColor = ConsoleColor.DarkRed;
                             Console.Write('K');
+                            Console.ForegroundColor = ConsoleColor.Gray;
                             grid[_kiryuPosX, _kiryuPosY].isKiryu = false;
                             grid[_kiryuPosX - 1, _kiryuPosY].isKiryu = true;
                             _kiryuPosX -= 1;
@@ -304,7 +320,9 @@ namespace The_seventh_yakuzer
                             Console.SetCursorPosition(cLPos - 1, cTPos);
                             Console.Write(' ');
                             Console.SetCursorPosition(uCLPos, cTPos);
+                            Console.ForegroundColor = ConsoleColor.DarkRed;
                             Console.Write('K');
+                            Console.ForegroundColor = ConsoleColor.Gray;
                             grid[_kiryuPosX, _kiryuPosY].isKiryu = false;
                             grid[_kiryuPosX + 3, _kiryuPosY].isKiryu = true;
                             _kiryuPosX += 3;
@@ -319,7 +337,9 @@ namespace The_seventh_yakuzer
                             Console.SetCursorPosition(cLPos - 1, cTPos);
                             Console.Write(' ');
                             Console.SetCursorPosition(uCLPos - 2, cTPos);
+                            Console.ForegroundColor = ConsoleColor.DarkRed;
                             Console.Write('K');
+                            Console.ForegroundColor = ConsoleColor.Gray;
                             grid[_kiryuPosX, _kiryuPosY].isKiryu = false;
                             grid[_kiryuPosX + 1, _kiryuPosY].isKiryu = true;
                             _kiryuPosX += 1;
@@ -347,6 +367,23 @@ namespace The_seventh_yakuzer
 
             }
 
+            sr.Close();
+
+            StreamReader sr2 = new StreamReader("../../../Sprites/FIGHT_Goku.txt");
+
+            _line = sr2.ReadLine();
+
+            for (int i = 0; i < 31; i++)
+            {
+                Console.SetCursorPosition(71, 7 + i);
+                Console.Write(_line);
+                _line = sr2.ReadLine();
+            }
+
+            sr2.Close();
+
+
+
             //Set the first party member's infos on the UI
             string curPlName = Party[0].Name;
             int curPlHP = Party[0].PV;
@@ -360,29 +397,41 @@ namespace The_seventh_yakuzer
             //Draw said infos
             int y = 46;
             Console.SetCursorPosition(9, y);
+
+            Console.ForegroundColor = ConsoleColor.White;
             Console.Write(curPlName);
+            Console.ForegroundColor = ConsoleColor.Gray;
 
             Console.SetCursorPosition(Console.CursorLeft + 8, y);
             Console.Write('|');
+
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.SetCursorPosition(Console.CursorLeft + 8, y);
             Console.Write(curPlHP);
             Console.Write('/');
             Console.Write(curPlHPM);
             Console.Write(" HP");
+            Console.ForegroundColor = ConsoleColor.Gray;
 
             Console.SetCursorPosition(Console.CursorLeft + 8, y);
             Console.Write('|');
+
+            Console.ForegroundColor = ConsoleColor.Green;
             Console.SetCursorPosition(Console.CursorLeft + 8, y);
             Console.Write(curPlMP);
             Console.Write('/');
             Console.Write(curPlMPM);
             Console.Write(" MP");
+            Console.ForegroundColor = ConsoleColor.Gray;
 
             Console.SetCursorPosition(Console.CursorLeft + 8, y);
             Console.Write('|');
+
+            Console.ForegroundColor = ConsoleColor.Yellow;   
             Console.SetCursorPosition(Console.CursorLeft + 8, y);
             Console.Write("Status : ");
             Console.Write(curPlStt);
+            Console.ForegroundColor = ConsoleColor.Gray;
 
             SelectHover(ConsoleColor.Blue, Party);
         }
@@ -729,6 +778,62 @@ namespace The_seventh_yakuzer
                 Console.ForegroundColor = color;
                 Console.Write('-');
                 Console.ForegroundColor = ConsoleColor.Gray;
+
+                if (_prevCurX == 1)
+                {
+                    Console.SetCursorPosition(155, 36);
+                    Console.Write("                         ");
+                    Console.SetCursorPosition(155, 36);
+                    Console.Write(Party[0].AttackList[_cursorPosX + (2 * _cursorPosY)].Name);
+
+                    Console.SetCursorPosition(155, 40);
+                    Console.Write("                         ");
+                    Console.SetCursorPosition(155, 40);
+
+                    if (Party[0].AttackList[_cursorPosX + (2 * _cursorPosY)].Type.Count == 2)
+                    {
+                        Console.Write(Party[0].AttackList[_cursorPosX + (2 * _cursorPosY)].Type[0]);
+                        Console.Write('/');
+                        Console.Write(Party[0].AttackList[_cursorPosX + (2 * _cursorPosY)].Type[1]);
+                    }
+
+                    if (Party[0].AttackList[_cursorPosX + (2 * _cursorPosY)].Type.Count == 1)
+                    {
+                        Console.Write(Party[0].AttackList[_cursorPosX + (2 * _cursorPosY)].Type[0]);
+                    }
+
+                    Console.SetCursorPosition(155, 41);
+                    Console.Write("                         ");
+                    Console.SetCursorPosition(155, 41);
+                    Console.Write(Party[0].AttackList[_cursorPosX + (2 * _cursorPosY)].PMCost);
+                    Console.Write(" MP");
+
+                    Console.SetCursorPosition(155, 42);
+                    Console.Write("                         ");
+                    Console.SetCursorPosition(155, 42);
+                    Console.Write(Party[0].AttackList[_cursorPosX + (2 * _cursorPosY)].DmgMin);
+                    Console.Write(" - ");
+                    Console.Write(Party[0].AttackList[_cursorPosX + (2 * _cursorPosY)].DmgMax);
+                    Console.Write(" DMG");
+
+                    Console.SetCursorPosition(155, 43);
+                    Console.Write("                         ");
+                    Console.SetCursorPosition(155, 43);
+                    Console.Write(Party[0].AttackList[_cursorPosX + (2 * _cursorPosY)].Precision);
+                    Console.Write(" PRC");
+
+                    Console.SetCursorPosition(155, 44);
+                    Console.Write("                         ");
+                    Console.SetCursorPosition(155, 44);
+                    if (Party[0].AttackList[_cursorPosX + (2 * _cursorPosY)].EffectList == null)
+                    {
+                        Console.Write("NO FCT");
+                    }
+                    else
+                    {
+                        Console.Write(Party[0].AttackList[_cursorPosX + (2 * _cursorPosY)].EffectList[0]);
+                    }
+                }
             }
         }
 

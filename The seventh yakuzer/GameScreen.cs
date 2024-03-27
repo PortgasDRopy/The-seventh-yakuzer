@@ -356,7 +356,7 @@ namespace The_seventh_yakuzer
             }
         }
 
-        public void SetFightUI(List<Character> Party)
+        public void SetFightUI(Fight fight)
         {
             Console.Clear();
             StreamReader sr = new StreamReader("../../../UI/Fight.txt");
@@ -364,7 +364,8 @@ namespace The_seventh_yakuzer
             _line = sr.ReadLine();
 
             for (int i = 0; i < 56; i++)
-            { 
+            {
+                Console.SetCursorPosition(0, i);
                 Console.Write(_line);
                 _line = sr.ReadLine();
 
@@ -388,14 +389,14 @@ namespace The_seventh_yakuzer
 
 
             //Set the first party member's infos on the UI
-            string curPlName = Party[0].Name;
-            int curPlHP = Party[0].PV;
+            string curPlName = fight.Party[0].Name;
+            int curPlHP = fight.Party[0].PV;
             int curPlHPM;
-            Party[0].StatDict.TryGetValue("PVMax", out curPlHPM);
-            int curPlMP = Party[0].PM;
+            fight.Party[0].StatDict.TryGetValue("PVMax", out curPlHPM);
+            int curPlMP = fight.Party[0].PM;
             int curPlMPM;
-            Party[0].StatDict.TryGetValue("MPMax", out curPlMPM);
-            string curPlStt = Party[0].Status[0].ToString();
+            fight.Party[0].StatDict.TryGetValue("MPMax", out curPlMPM);
+            string curPlStt = fight.Party[0].Status[0].ToString();
 
             //Draw said infos
             int y = 46;
@@ -436,7 +437,7 @@ namespace The_seventh_yakuzer
             Console.Write(curPlStt);
             Console.ForegroundColor = ConsoleColor.Gray;
 
-            SelectHover(ConsoleColor.Blue, Party);
+            SelectHover(ConsoleColor.Blue, fight.Party);
         }
 
         public void SetSubmenu(string sMenu, List<Character> Party)
@@ -840,7 +841,7 @@ namespace The_seventh_yakuzer
             }
         }
 
-        public void SelectOption(List<Character> Party)
+        public void SelectOption(Fight fight)
         {
             //Main Fight Menu
             if (_selectMode == 0)
@@ -859,28 +860,44 @@ namespace The_seventh_yakuzer
                     {
                         case 1:
                             sMenu = "skills";
-                            SetSubmenu(sMenu, Party);
-                            SelectHover(ConsoleColor.Blue, Party);
+                            SetSubmenu(sMenu, fight.Party);
+                            SelectHover(ConsoleColor.Blue, fight.Party);
                             _curSMenu = sMenu;
                             break;
 
                         case 3:
                             sMenu = "items";
-                            SetSubmenu(sMenu, Party);
-                            SelectHover(ConsoleColor.Blue, Party);
+                            SetSubmenu(sMenu, fight.Party);
+                            SelectHover(ConsoleColor.Blue, fight.Party);
                             _curSMenu = sMenu;
                             break;
                     }
                 }
 
                 //Party
+                if (_cursorPosX == 0)
+                {
+                    if (fight.BasicAttack())
+                    {
+                        fight.Ennemy[0].PV -= fight.Party[0].EquippedStyle.AttackList[0].DmgMax;
+                        fight.Party[0].PM -= fight.Party[0].EquippedStyle.AttackList[0].PMCost;
+                    }
+                }
                 if (_cursorPosX == 2)
                 {
                     _selectMode = 1;
                     sMenu = "party";
-                    SetSubmenu(sMenu, Party);
-                    SelectHover(ConsoleColor.Blue, Party);
+                    SetSubmenu(sMenu, fight.Party);
+                    SelectHover(ConsoleColor.Blue, fight.Party);
                     _curSMenu = sMenu;
+                }
+
+                if (_cursorPosX == 4)
+                {
+                    if (fight.Run())
+                    {
+                        Program.changeMode(Program.GameModes.MAP, fight);
+                    }
                 }
             }
         }

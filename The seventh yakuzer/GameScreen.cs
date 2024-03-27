@@ -661,7 +661,7 @@ namespace The_seventh_yakuzer
                     Console.SetCursorPosition(126, 52);
                     Console.WriteLine("       _| |_| ||  __/ | | | | \\__ \\      ");
                     Console.SetCursorPosition(126, 53);
-                    Console.WriteLine("       \\___/ \\__\\___|_| |_| |_|___/      ");
+                    Console.WriteLine("       \\___/ \\__\\___|_| |_| |_|___/      "); 
                     Console.ForegroundColor = ConsoleColor.Gray;
                 }
 

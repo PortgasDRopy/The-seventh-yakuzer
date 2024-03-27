@@ -52,11 +52,25 @@ namespace The_seventh_yakuzer
 
         public bool BasicAttack()
         {
-            if (Randomizer.Next(101) <= Party[0].EquippedStyle.AttackList[0].Precision - Ennemy[0].EquippedStyle.StatDict["Agility"])
+            if (Randomizer.Next(101) <= Party[0].EquippedStyle.AttackList[0].Precision - Ennemy[0].EquippedStyle.StatDict["Agility"] + Party[0].EquippedStyle.StatDict["Agility"])
             {
                 return true;
             }
             return false;
+        }
+
+        public bool Attack(Attack attack)
+        {
+            if (Randomizer.Next(101) <= attack.Precision - Ennemy[0].EquippedStyle.StatDict["Agility"] + Party[0].EquippedStyle.StatDict["Agility"])
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public void UseItem(Item item, Character user)
+        {
+            item.Use(user);
         }
     }
 }

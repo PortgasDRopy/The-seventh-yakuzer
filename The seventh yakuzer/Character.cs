@@ -42,7 +42,7 @@ namespace The_seventh_yakuzer
             Level = 1;
             PV = StatDict["PV"];
             PM = StatDict["PM"];
-            Status = new List<GameData.Status>();
+            Status = new List<GameData.Status>() {GameData.Status.GOOD};
             AttackList = attackList;
             StyleList = null;
             EquippedStyle = this;

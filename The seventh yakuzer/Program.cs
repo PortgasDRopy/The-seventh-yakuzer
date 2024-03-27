@@ -19,6 +19,15 @@ namespace The_seventh_yakuzer
             MENU = 3
         }
 
+        static void isEnnemy(GameScreen gs, List<Character> party)
+        {
+            var isEnnemy = new Random();
+            if (isEnnemy.Next(101) <= gs.grid[gs._kiryuPosX, gs._kiryuPosY].danger)
+            {
+                gs.SetFightUI(party);
+            }
+        }
+
         static void Main(string[] args)
         {
             GameModes gMode = GameModes.MAP;
@@ -54,34 +63,42 @@ namespace The_seventh_yakuzer
 
                         case ConsoleKey.UpArrow:
                             gs.MoveCharacter("Up");
+                            isEnnemy(gs, Party);
                             break;
 
                         case ConsoleKey.W:
                             gs.MoveCharacter("Up");
+                            isEnnemy(gs, Party);
                             break;
 
                         case ConsoleKey.DownArrow:
                             gs.MoveCharacter("Down");
+                            isEnnemy(gs, Party);
                             break;
 
                         case ConsoleKey.S:
                             gs.MoveCharacter("Down");
+                            isEnnemy(gs, Party);
                             break;
 
                         case ConsoleKey.LeftArrow:
                             gs.MoveCharacter("Left");
+                            isEnnemy(gs, Party);
                             break;
 
                         case ConsoleKey.A:
                             gs.MoveCharacter("Left");
+                            isEnnemy(gs, Party);
                             break;
 
                         case ConsoleKey.RightArrow:
                             gs.MoveCharacter("Right");
+                            isEnnemy(gs, Party);
                             break;
 
                         case ConsoleKey.D:
                             gs.MoveCharacter("Right");
+                            isEnnemy(gs, Party);
                             break;
 
                         case ConsoleKey.D1:

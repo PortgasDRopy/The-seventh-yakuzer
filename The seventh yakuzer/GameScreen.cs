@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -38,6 +39,7 @@ namespace The_seventh_yakuzer
             public bool isWall;
             public bool isKiryu;
             public int tpID;
+            public int danger;
         }
 
         public mapGrid[,] grid = new mapGrid[150,56];
@@ -96,6 +98,7 @@ namespace The_seventh_yakuzer
             {
                 for (int j = 0; j < 150; j++)
                 {
+                    
                     grid[j,i].display = _line[j];
                     grid[j,i].isKiryu = false;
                     grid[j, i].isWall = true;
@@ -103,6 +106,7 @@ namespace The_seventh_yakuzer
                     if (grid[j,i].display == ' ')
                     {
                         grid[j,i].isWall = false;
+                        grid[j, i].danger = 10;
                     }
                     else if (grid[j,i].display == '1')
                     {
@@ -169,7 +173,6 @@ namespace The_seventh_yakuzer
             int cTPos = Console.CursorTop;
             int uCLPos;
             int uCTPos;
-
             switch (dir) 
             { 
                 case "Up":

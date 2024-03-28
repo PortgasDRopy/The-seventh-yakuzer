@@ -5,19 +5,23 @@ using System.Net.Sockets;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using static The_seventh_yakuzer.GameData;
 
 namespace The_seventh_yakuzer
 {
     internal class Program
     {
 
-        enum GameModes
+        public enum GameModes
         {
             MAP = 0,
             FIGHT = 1,
             DIALOG = 2,
             MENU = 3
         }
+
+        static public GameScreen gs = new GameScreen();
+        static GameModes gMode = GameModes.MAP;
 
         static void Main(string[] args)
         {
@@ -26,7 +30,7 @@ namespace The_seventh_yakuzer
 
             GameScreen gs = new GameScreen();
             GameState gameState = new GameState();
-
+          
             bool mainMenu = true;
             bool game = true;
             string dir;
@@ -106,11 +110,13 @@ namespace The_seventh_yakuzer
                 }
             }
 
-            List<Character> Party = gameState.Party;
-            Dictionary<string, List<Item>> inventory = gameState.Inventory;
-            GameData.SetWeaponList();
+                List<Character> Party = gameState.Party;
+                Dictionary<string, List<Item>> inventory = gameState.Inventory;
+                GameData.SetWeaponList();
+              
+                Fight fight = new Fight(Party, Party);
 
-            GameModes gMode = GameModes.MAP;
+                GameModes gMode = GameModes.MAP;
 
             int currentMapX = gameState.CurrentMap[0];
             int currentMapY = gameState.CurrentMap[1];
@@ -130,41 +136,79 @@ namespace The_seventh_yakuzer
                 {
                     switch (Console.ReadKey(true).Key)
                     {
-
                         case ConsoleKey.Enter:
                             break;
 
                         case ConsoleKey.UpArrow:
                             gs.MoveCharacter("Up");
-
+                            if (fight.IsEnnemy(gs))
+                            {
+                                gs.SetFightUI(fight);
+                                gMode = GameModes.FIGHT;
+                            }
                             break;
 
                         case ConsoleKey.W:
                             gs.MoveCharacter("Up");
+                            if (fight.IsEnnemy(gs))
+                            {
+                                gs.SetFightUI(fight);
+                                gMode = GameModes.FIGHT;
+                            }
                             break;
 
                         case ConsoleKey.DownArrow:
                             gs.MoveCharacter("Down");
+                            if (fight.IsEnnemy(gs))
+                            {
+                                gs.SetFightUI(fight);
+                                gMode = GameModes.FIGHT;
+                            }
                             break;
 
                         case ConsoleKey.S:
                             gs.MoveCharacter("Down");
+                            if (fight.IsEnnemy(gs))
+                            {
+                                gs.SetFightUI(fight);
+                                gMode = GameModes.FIGHT;
+                            }
                             break;
 
                         case ConsoleKey.LeftArrow:
                             gs.MoveCharacter("Left");
+                            if (fight.IsEnnemy(gs))
+                            {
+                                gs.SetFightUI(fight);
+                                gMode = GameModes.FIGHT;
+                            }
                             break;
 
                         case ConsoleKey.A:
                             gs.MoveCharacter("Left");
+                            if (fight.IsEnnemy(gs))
+                            {
+                                gs.SetFightUI(fight);
+                                gMode = GameModes.FIGHT;
+                            }
                             break;
 
                         case ConsoleKey.RightArrow:
                             gs.MoveCharacter("Right");
+                            if (fight.IsEnnemy(gs))
+                            {
+                                gs.SetFightUI(fight);
+                                gMode = GameModes.FIGHT;
+                            }
                             break;
 
                         case ConsoleKey.D:
                             gs.MoveCharacter("Right");
+                            if (fight.IsEnnemy(gs))
+                            {
+                                gs.SetFightUI(fight);
+                                gMode = GameModes.FIGHT;
+                            }
                             break;
 
                         case ConsoleKey.D1:
@@ -217,7 +261,7 @@ namespace The_seventh_yakuzer
 
                         case ConsoleKey.D7:
                             gMode = GameModes.FIGHT;
-                            gs.SetFightUI(Party);
+                            gs.SetFightUI(fight);
                             gs._cursorPosX = 0;
                             gs._cursorPosY = 0;
                             gs._selectMode = 0;
@@ -242,7 +286,7 @@ namespace The_seventh_yakuzer
 
                         case ConsoleKey.Enter:
                             gs.SelectHover(ConsoleColor.DarkBlue, Party);
-                            gs.SelectOption(Party);
+                            gs.SelectOption(fight);
                             break;
 
                         case ConsoleKey.Escape:
@@ -250,7 +294,7 @@ namespace The_seventh_yakuzer
                             gs._cursorPosY = gs._prevCurY;
                             gs._selectMode = 0;
                             gs.SelectHover(ConsoleColor.Blue, Party);
-                            gs.SetFightUI(Party);
+                            gs.SetFightUI(fight);
                             break;
 
                         case ConsoleKey.UpArrow:
@@ -296,7 +340,7 @@ namespace The_seventh_yakuzer
                         case ConsoleKey.D7:
                             gMode = GameModes.FIGHT;
                             Console.Clear();
-                            gs.SetFightUI(Party);
+                            gs.SetFightUI(fight);
                             break;
 
                         case ConsoleKey.D8:
@@ -387,6 +431,26 @@ namespace The_seventh_yakuzer
                             break;
                     }
                 }
+                }
+            }
+        }
+
+        static public void changeMode(GameModes Mode, Fight fight)
+        {
+            if (Mode == GameModes.FIGHT)
+            {
+                gMode = GameModes.FIGHT;
+                Console.Clear();
+                gs.SetFightUI(fight);
+            }
+            else if (Mode == GameModes.MAP)
+            {
+                gMode = GameModes.MAP;
+                Console.Clear();
+                gs.SetMenuTab();
+                gs.SetSpritesTab();
+                gs.SetMapTab(0, 0);
+                gs.InitKiryu(gs._kiryuPosX - 1, gs._kiryuPosY);
             }
         }
     }

@@ -32,13 +32,14 @@ namespace The_seventh_yakuzer
             }
             foreach (Character chara in Party) 
             {
-                chara.OnKO += this.ChangeCharacter();
+                chara.OnKO += this.ChangeCharacter;
             }
         }
         public bool IsEnnemy(GameScreen gs)
         {
             if (Randomizer.Next(101) <= gs.grid[gs._kiryuPosX, gs._kiryuPosY].danger)
             {
+                Turn = (Turn + 1) % 2;
                 return true;
             }
             return false;

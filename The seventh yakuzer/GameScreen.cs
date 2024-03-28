@@ -458,9 +458,9 @@ namespace The_seventh_yakuzer
             //Set the first party member's infos on the UI
 
             string curPlName = fight.Party[0].EquippedStyle.Name;
-            int curPlHP = fight.Party[0].EquippedStyle.PV;
+            int curPlHP = fight.Party[0].PV;
             int curPlHPM = fight.Party[0].EquippedStyle.StatDict["PV"];
-            int curPlMP = fight.Party[0].EquippedStyle.PM;
+            int curPlMP = fight.Party[0].PM;
             int curPlMPM = fight.Party[0].EquippedStyle.StatDict["PM"];
             string curPlStt = fight.Party[0].EquippedStyle.Status[0].ToString();
 
@@ -1345,7 +1345,7 @@ namespace The_seventh_yakuzer
                 {
                     if (fight.Attack(fight.Party[0].AttackList[_cursorPosX + (2 * _cursorPosY)]))
                     {
-                        fight.Ennemy[0].SetHP(fight.Party[0].EquippedStyle.AttackList[_cursorPosX + (2 * _cursorPosY)].DmgMax);
+                        fight.Ennemy[0].SetHP(fight.Party[0].EquippedStyle.AttackList[_cursorPosX + (2 * _cursorPosY)].DmgMax, fight);
                         fight.Party[0].PM -= fight.Party[0].EquippedStyle.AttackList[_cursorPosX + (2 * _cursorPosY)].PMCost;
                         DisplayTurnInfo(fight, " used " + fight.Party[0].EquippedStyle.AttackList[_cursorPosX + (2 * _cursorPosY)].Name + " and dealt " + (fight.Party[0].EquippedStyle.StatDict["Attack"] + fight.Party[0].EquippedStyle.AttackList[_cursorPosX + (2 * _cursorPosY)].DmgMax) + " Damages to " + fight.Ennemy[0].Name);
                     }
@@ -1388,7 +1388,7 @@ namespace The_seventh_yakuzer
                 {
                     if (fight.BasicAttack(fight.Party[0], fight.Ennemy[0]))
                     {
-                        fight.Ennemy[0].SetHP(fight.Party[0].EquippedStyle.AttackList[0].DmgMax);
+                        fight.Ennemy[0].SetHP(fight.Party[0].EquippedStyle.AttackList[0].DmgMax, fight);
                         fight.Party[0].PM -= fight.Party[0].EquippedStyle.AttackList[0].PMCost;
                         DisplayTurnInfo(fight, " used " + fight.Party[0].EquippedStyle.AttackList[0].Name + " and dealt " + (fight.Party[0].EquippedStyle.StatDict["Attack"] + fight.Party[0].EquippedStyle.AttackList[0].DmgMax) + " Damages to " + fight.Ennemy[0].Name);
                     }

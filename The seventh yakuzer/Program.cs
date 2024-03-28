@@ -355,9 +355,9 @@ namespace The_seventh_yakuzer
                     if (fight.BasicAttack(fight.Ennemy[0], fight.Party[0]))
                         {
 
-                            fight.Party[0].SetHP(fight.Ennemy[0].EquippedStyle.AttackList[0].DmgMax);
-                            fight.Ennemy[0].PM -= fight.Ennemy[0].EquippedStyle.AttackList[0].PMCost;
-                            gs.DisplayTurnInfo(fight, fight.Ennemy[0].EquippedStyle.AttackList[0].Name + " and dealt " + (fight.Ennemy[0].EquippedStyle.StatDict["Attack"] + fight.Ennemy[0].EquippedStyle.AttackList[0].DmgMax) + " Damages to " + fight.Party[0].Name);
+                            fight.Party[0].SetHP(fight.Ennemy[0].EquippedStyle.AttackList[0].DmgMax, fight);
+                            fight.Ennemy[0].SetMP(fight.Ennemy[0].EquippedStyle.AttackList[0].PMCost, fight);
+                            gs.DisplayTurnInfo(fight, " used " + fight.Ennemy[0].EquippedStyle.AttackList[0].Name + " and dealt " + (fight.Ennemy[0].EquippedStyle.StatDict["Attack"] + fight.Ennemy[0].EquippedStyle.AttackList[0].DmgMax) + " Damages to " + fight.Party[0].Name);
                         }
 
 

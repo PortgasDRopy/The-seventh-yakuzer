@@ -30,11 +30,16 @@ namespace The_seventh_yakuzer
             {
                 Turn = Randomizer.Next(2);
             }
+            foreach (Character chara in Party) 
+            {
+                chara.OnKO += this.ChangeCharacter;
+            }
         }
         public bool IsEnnemy(GameScreen gs)
         {
             if (Randomizer.Next(101) <= gs.grid[gs._kiryuPosX, gs._kiryuPosY].danger)
             {
+                Turn = (Turn + 1) % 2;
                 return true;
             }
             return false;
@@ -50,12 +55,14 @@ namespace The_seventh_yakuzer
             return false;
         }
 
-        public bool BasicAttack()
+        public bool BasicAttack(Character attacker, Character attacked)
         {
-            if (Randomizer.Next(101) <= Party[0].EquippedStyle.AttackList[0].Precision - Ennemy[0].EquippedStyle.StatDict["Agility"] + Party[0].EquippedStyle.StatDict["Agility"])
+            if (Randomizer.Next(101) <= attacker.EquippedStyle.AttackList[0].Precision - attacked.EquippedStyle.StatDict["Agility"] + attacker.EquippedStyle.StatDict["Agility"])
             {
+                Turn = (Turn + 1) % 2;
                 return true;
             }
+            Turn = (Turn + 1) % 2;
             return false;
         }
 
@@ -63,14 +70,43 @@ namespace The_seventh_yakuzer
         {
             if (Randomizer.Next(101) <= attack.Precision - Ennemy[0].EquippedStyle.StatDict["Agility"] + Party[0].EquippedStyle.StatDict["Agility"])
             {
+                Turn = (Turn + 1) % 2;
                 return true;
             }
+            Turn = (Turn + 1) % 2;
             return false;
         }
 
         public void UseItem(Item item, Character user)
         {
             item.Use(user);
+            Turn = (Turn + 1) % 2;
         }
+
+        public void ChangeCharacter()
+        {
+            if (Ennemy[0].PV == 0)
+            {
+                Program.gs.DisplayTurnInfo(this, " killed " + Ennemy[0]);
+                Ennemy.Remove(Ennemy[0]);
+                if (Ennemy.Count == 0)
+                {
+                    Program.gs.DisplayTurnInfo(this, " won the fight. You win !!!");
+                    System.Threading.Thread.Sleep(2000);
+                    Program.changeMode(Program.GameModes.MAP, this);
+                }
+            }
+            if (Party[0].PV == 0)
+            {
+                Program.gs.DisplayTurnInfo(this, " killed " + Party[0]);
+                Party.Remove(Party[0]);
+                if (Party.Count == 0)
+                {
+                    Program.gs.DisplayTurnInfo(this, " won the fight. You lost !!!");
+                    Environment.Exit(0);
+                }
+            }
+        }
+
     }
 }

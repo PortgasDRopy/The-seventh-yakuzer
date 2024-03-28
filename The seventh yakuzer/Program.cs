@@ -27,8 +27,6 @@ namespace The_seventh_yakuzer
         {
             Console.SetWindowPosition(0, 0);
             Console.CursorVisible = false;
-
-            GameScreen gs = new GameScreen();
             GameState gameState = new GameState();
           
             bool mainMenu = true;
@@ -37,10 +35,12 @@ namespace The_seventh_yakuzer
 
             gs.SetMainMenu();
 
+
             while (mainMenu)
             {
 
                 switch (Console.ReadKey(true).Key)
+
                 {
 
                     case ConsoleKey.Enter:
@@ -108,15 +108,22 @@ namespace The_seventh_yakuzer
 
                     break;
                 }
+              
+                mainMenu = false;
             }
 
-                List<Character> Party = gameState.Party;
-                Dictionary<string, List<Item>> inventory = gameState.Inventory;
-                GameData.SetWeaponList();
-              
-                Fight fight = new Fight(Party, Party);
+            
+            gs._curSMenu = null;
+            gs._cursorPosX = 0;
+            gs._cursorPosY = 0;
+            gs._selectMode = 0;
 
-                GameModes gMode = GameModes.MAP;
+            List<Character> Party = gameState.Party;
+            List<Character> Ennemy = new List<Character>() { GameData.Nishiki };
+            Dictionary<string, List<Item>> inventory = gameState.Inventory;
+            GameData.SetWeaponList();
+              
+            Fight fight = new Fight(Ennemy, Party);
 
             int currentMapX = gameState.CurrentMap[0];
             int currentMapY = gameState.CurrentMap[1];
@@ -131,7 +138,6 @@ namespace The_seventh_yakuzer
 
             while (game)
             {
-
                 while (gMode == GameModes.MAP)
                 {
                     switch (Console.ReadKey(true).Key)
@@ -280,163 +286,161 @@ namespace The_seventh_yakuzer
 
                 while (gMode == GameModes.FIGHT)
                 {
-
-                    switch (Console.ReadKey(true).Key)
+                  
+                    while (fight.Turn == 0)
                     {
+                      
+                        switch (Console.ReadKey(true).Key)
+                        {
+                            case ConsoleKey.Enter:
+                                gs.SelectHover(ConsoleColor.DarkBlue, Party);
+                                gs.SelectOption(fight);
+                                break;
 
-                        case ConsoleKey.Enter:
-                            gs.SelectHover(ConsoleColor.DarkBlue, Party);
-                            gs.SelectOption(fight);
-                            break;
+                            case ConsoleKey.Escape:
+                                gs._cursorPosX = gs._prevCurX;
+                                gs._cursorPosY = gs._prevCurY;
+                                gs._selectMode = 0;
+                                gs.SelectHover(ConsoleColor.Blue, Party);
+                                gs.SetFightUI(fight);
+                                break;
 
-                        case ConsoleKey.Escape:
-                            gs._cursorPosX = gs._prevCurX;
-                            gs._cursorPosY = gs._prevCurY;
-                            gs._selectMode = 0;
-                            gs.SelectHover(ConsoleColor.Blue, Party);
-                            gs.SetFightUI(fight);
-                            break;
+                            case ConsoleKey.UpArrow:
+                                dir = "u";
+                                gs.MoveCursor(dir, Party);
+                                break;
 
-                        case ConsoleKey.UpArrow:
-                            dir = "u";
-                            gs.MoveCursor(dir, Party);
-                            break;
+                            case ConsoleKey.W:
+                                dir = "u";
+                                gs.MoveCursor(dir, Party);
+                                break;
 
-                        case ConsoleKey.W:
-                            dir = "u";
-                            gs.MoveCursor(dir, Party);
-                            break;
+                            case ConsoleKey.DownArrow:
+                                dir = "d";
+                                gs.MoveCursor(dir, Party);
+                                break;
 
-                        case ConsoleKey.DownArrow:
-                            dir = "d";
-                            gs.MoveCursor(dir, Party);
-                            break;
+                            case ConsoleKey.S:
+                                dir = "d";
+                                gs.MoveCursor(dir, Party);
+                                break;
 
-                        case ConsoleKey.S:
-                            dir = "d";
-                            gs.MoveCursor(dir, Party);
-                            break;
+                            case ConsoleKey.LeftArrow:
+                                dir = "l";
+                                gs.MoveCursor(dir, Party);
+                                break;
 
-                        case ConsoleKey.LeftArrow:
-                            dir = "l";
-                            gs.MoveCursor(dir, Party);
-                            break;
+                            case ConsoleKey.A:
+                                dir = "l";
+                                gs.MoveCursor(dir, Party);
+                                break;
 
-                        case ConsoleKey.A:
-                            dir = "l";
-                            gs.MoveCursor(dir, Party);
-                            break;
+                            case ConsoleKey.RightArrow:
+                                dir = "r";
+                                gs.MoveCursor(dir, Party);
+                                break;
 
-                        case ConsoleKey.RightArrow:
-                            dir = "r";
-                            gs.MoveCursor(dir, Party);
-                            break;
+                            case ConsoleKey.D:
+                                dir = "r";
+                                gs.MoveCursor(dir, Party);
+                                break;
 
-                        case ConsoleKey.D:
-                            dir = "r";
-                            gs.MoveCursor(dir, Party);
-                            break;
-
-                        case ConsoleKey.D7:
-                            gMode = GameModes.FIGHT;
-                            Console.Clear();
-                            gs.SetFightUI(fight);
-                            break;
-
-                        case ConsoleKey.D8:
-                            //gMode = GameModes.DIALOG;
-                            break;
-
-                        case ConsoleKey.D9:
-                            gMode = GameModes.MAP;
-                            Console.Clear();
-                            gs.SetMenuTab();
-                            gs.SetSpritesTab(Party);
-                            gs.SetMapTab(currentMapX, currentMapY);
-                            gs.InitKiryu(gs._kiryuPosX - 1, gs._kiryuPosY);
-                            break;
-                    }
-
-
-                }
-
-                while (gMode == GameModes.DIALOG)
-                {
-
-                }
-
-                while (gMode == GameModes.MENU)
-                {
-                    switch (Console.ReadKey(true).Key)
-                    {
-
-                        case ConsoleKey.Enter:
-                            gs.SelectHover(ConsoleColor.DarkBlue, Party);
-                            gs.SelectOption(Party);
-                            break;
-
-                        case ConsoleKey.Escape:
-                            gs._cursorPosX = gs._prevCurX;
-                            gs._cursorPosY = gs._prevCurY;
-                            gs._selectMode = 0;
-
-                            if (gs._curSMenu == "MParty" || gs._curSMenu == "MItems")
+                            case ConsoleKey.D7:
+                                gMode = GameModes.FIGHT;
+                                Console.Clear();
+                                gs.SetFightUI(fight);
+                                break;
+                            }
+                        }
+                        if (fight.BasicAttack(fight.Ennemy[0], fight.Party[0]))
                             {
-                                gMode = GameModes.MAP;
-                                gs._curSMenu = null;
-                                gs.SetMapTab(currentMapX, currentMapY);
-                                gs.InitKiryu(gs._kiryuPosX - 1, gs._kiryuPosY);
+
+                                fight.Party[0].SetHP(fight.Ennemy[0].EquippedStyle.AttackList[0].DmgMax, fight);
+                                fight.Ennemy[0].SetMP(fight.Ennemy[0].EquippedStyle.AttackList[0].PMCost, fight);
+                                gs.DisplayTurnInfo(fight, " used " + fight.Ennemy[0].EquippedStyle.AttackList[0].Name + " and dealt " + (fight.Ennemy[0].EquippedStyle.StatDict["Attack"] + fight.Ennemy[0].EquippedStyle.AttackList[0].DmgMax) + " Damages to " + fight.Party[0].Name);
                             }
 
-                            break;
 
-                        case ConsoleKey.UpArrow:
-                            dir = "u";
-                            gs.MoveCursor(dir, Party);
-                            break;
-
-                        case ConsoleKey.W:
-                            dir = "u";
-                            gs.MoveCursor(dir, Party);
-                            break;
-
-                        case ConsoleKey.DownArrow:
-                            dir = "d";
-                            gs.MoveCursor(dir, Party);
-                            break;
-
-                        case ConsoleKey.S:
-                            dir = "d";
-                            gs.MoveCursor(dir, Party);
-                            break;
-
-                        case ConsoleKey.LeftArrow:
-                            dir = "l";
-                            gs.MoveCursor(dir, Party);
-                            break;
-
-                        case ConsoleKey.A:
-                            dir = "l";
-                            gs.MoveCursor(dir, Party);
-                            break;
-
-                        case ConsoleKey.RightArrow:
-                            dir = "r";
-                            gs.MoveCursor(dir, Party);
-                            break;
-
-                        case ConsoleKey.D:
-                            dir = "r";
-                            gs.MoveCursor(dir, Party);
-                            break;
                     }
-                }
+
+                    while (gMode == GameModes.DIALOG)
+                    {
+
+                    }
+
+                    while (gMode == GameModes.MENU)
+                    {
+                        switch (Console.ReadKey(true).Key)
+                        {
+
+                            case ConsoleKey.Enter:
+                                gs.SelectHover(ConsoleColor.DarkBlue, Party);
+                                gs.SelectOption(Party);
+                                break;
+
+                            case ConsoleKey.Escape:
+                                gs._cursorPosX = gs._prevCurX;
+                                gs._cursorPosY = gs._prevCurY;
+                                gs._selectMode = 0;
+
+                                if (gs._curSMenu == "MParty" || gs._curSMenu == "MItems")
+                                {
+                                    gMode = GameModes.MAP;
+                                    gs._curSMenu = null;
+                                    gs.SetMapTab(currentMapX, currentMapY);
+                                    gs.InitKiryu(gs._kiryuPosX - 1, gs._kiryuPosY);
+                                }
+
+                                break;
+
+                            case ConsoleKey.UpArrow:
+                                dir = "u";
+                                gs.MoveCursor(dir, Party);
+                                break;
+
+                            case ConsoleKey.W:
+                                dir = "u";
+                                gs.MoveCursor(dir, Party);
+                                break;
+
+                            case ConsoleKey.DownArrow:
+                                dir = "d";
+                                gs.MoveCursor(dir, Party);
+                                break;
+
+                            case ConsoleKey.S:
+                                dir = "d";
+                                gs.MoveCursor(dir, Party);
+                                break;
+
+                            case ConsoleKey.LeftArrow:
+                                dir = "l";
+                                gs.MoveCursor(dir, Party);
+                                break;
+
+                            case ConsoleKey.A:
+                                dir = "l";
+                                gs.MoveCursor(dir, Party);
+                                break;
+
+                            case ConsoleKey.RightArrow:
+                                dir = "r";
+                                gs.MoveCursor(dir, Party);
+                                break;
+
+                            case ConsoleKey.D:
+                                dir = "r";
+                                gs.MoveCursor(dir, Party);
+                                break;
+                        }
+                    }
                 }
             }
         }
 
         static public void changeMode(GameModes Mode, Fight fight)
         {
+
             if (Mode == GameModes.FIGHT)
             {
                 gMode = GameModes.FIGHT;
@@ -448,7 +452,7 @@ namespace The_seventh_yakuzer
                 gMode = GameModes.MAP;
                 Console.Clear();
                 gs.SetMenuTab();
-                gs.SetSpritesTab();
+                gs.SetSpritesTab(fight.Party);
                 gs.SetMapTab(0, 0);
                 gs.InitKiryu(gs._kiryuPosX - 1, gs._kiryuPosY);
             }

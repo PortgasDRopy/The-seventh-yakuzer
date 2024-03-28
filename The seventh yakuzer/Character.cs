@@ -25,14 +25,14 @@ namespace The_seventh_yakuzer
         public Character EquippedStyle { get; private set; }
         public List<Armor> EquippedArmor { get; private set; }
         public List<Gear> EquippedGears { get; private set; }
-        public Character(string name, string sprite, List<GameData.Type> type, int PV, int PM, int attack, int defense, int magic, int willpower, int agility, List<Attack> attackList, List<WeaponType>? possibleWeapon, Weapon? defaultWeapon)
+        public Character(string name, string sprite, List<GameData.Type> type, int pv, int pm, int attack, int defense, int magic, int willpower, int agility, List<Attack> attackList, List<WeaponType>? possibleWeapon, Weapon? defaultWeapon)
         {
             Name = name;
             Sprite = sprite;
             Type = type;
             StatDict = GameData.StatDictDefault;
-            StatDict["PV"] = PV;
-            StatDict["PM"] = PM;
+            StatDict["PV"] = pv;
+            StatDict["PM"] = pm;
             StatDict["Attack"] = attack;
             StatDict["Defense"] = defense;
             StatDict["Magic"] = magic;
@@ -42,7 +42,7 @@ namespace The_seventh_yakuzer
             Level = 1;
             PV = StatDict["PV"];
             PM = StatDict["PM"];
-            Status = new List<GameData.Status>();
+            Status = new List<GameData.Status>() {GameData.Status.GOOD};
             AttackList = attackList;
             StyleList = null;
             EquippedStyle = this;

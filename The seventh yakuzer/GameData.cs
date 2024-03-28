@@ -22,7 +22,7 @@ namespace The_seventh_yakuzer
         };
 
         public enum Type {FIRE = 1, ICE = 2, ELEC = 3, BLUNT = 4, MAGIC = 5, GUN = 6, BLADE = 7};
-        public enum Status {BURN = 1, COLD = 2, PARA = 3, POISON = 4, BLEED = 5, DRUNK = 6, KO = 7, SLEEP = 8, FEAR = 9, DARKNESS = 10, RAGE = 11, SILENCE = 12};
+        public enum Status {BURN = 1, COLD = 2, PARA = 3, POISON = 4, BLEED = 5, DRUNK = 6, KO = 7, SLEEP = 8, FEAR = 9, DARKNESS = 10, RAGE = 11, SILENCE = 12, GOOD = 13};
         public enum Weight { LIGHT = 1, MEDIUM = 2, HEAVY = 3};
         public enum BodyPart { HEAD = 1, BODY = 2, FEET = 3 };
         public static Attack BasicBlunt { get; } = new Attack("Basic Blunt Attack", 0, new List<GameData.Type> { Type.BLUNT }, - 10, 0, 5, 90, null);
@@ -42,12 +42,12 @@ namespace The_seventh_yakuzer
         public static Attack BasicBladeIce { get; } = new Attack("Basic Blade Ice Attack", 0, new List<GameData.Type> { Type.BLADE, Type.ICE }, -10, 0, 15, 90, null);
         public static Attack BasicBladeElec { get; } = new Attack("Basic Blade Elec Attack", 0, new List<GameData.Type> { Type.BLADE, Type.ELEC }, -10, 0, 15, 90, null);
         public static List<Attack> BasicAttack { get; } = new List<Attack>() { BasicBlunt, BasicBluntFire, BasicBluntIce, BasicBluntElec, BasicMagic, BasicFire, BasicIce, BasicElec, BasicGun, BasicGunFire, BasicGunIce, BasicGunElec, BasicBlade, BasicBladeFire, BasicBladeIce, BasicBladeElec };
-        public static List<Attack> KiryuBrawlAttacks { get; } = new List<Attack>();
+        public static List<Attack> KiryuBrawlAttacks { get; } = new List<Attack>() { BasicBlunt, BasicBluntFire, BasicBluntIce };
         public static List<Attack> KiryuRushAttacks { get; } = new List<Attack>();
         public static List<Attack> KiryuBeastAttacks { get; } = new List<Attack>();
         public static List<Attack> KiryuLegendAttacks { get; } = new List<Attack>();
-        public static List<Attack> NishikiAttacks { get; } = new List<Attack>();
-        public static List<Attack> KuzeAttacks { get; } = new List<Attack>();
+        public static List<Attack> NishikiAttacks { get; } = new List<Attack>() { BasicBluntElec, BasicMagic };
+        public static List<Attack> KuzeAttacks { get; } = new List<Attack>() { BasicIce, BasicElec, BasicGun, BasicGunFire, BasicGunIce, BasicGunElec, BasicBlade, BasicBladeFire, BasicBladeIce, BasicBladeElec };
         public static List<Attack> KuzePipeAttacks { get; } = new List<Attack>();
         public static List<Attack> KashiwagiAttacks { get; } = new List<Attack>();
         public static List<Attack> YonedaAttacks { get; } = new List<Attack>();

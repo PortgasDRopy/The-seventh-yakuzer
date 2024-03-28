@@ -843,6 +843,18 @@ namespace The_seventh_yakuzer
 
         public void SelectOption(Fight fight)
         {
+            if (_selectMode == 2)
+            {
+                if (_curSMenu == "skills") 
+                {
+                    if (fight.Attack(fight.Party[0].AttackList[_cursorPosX + (2 * _cursorPosY)]))
+                    {
+                        fight.Ennemy[0].PV -= fight.Party[0].EquippedStyle.AttackList[_cursorPosX + (2 * _cursorPosY)].DmgMax;
+                        fight.Party[0].PM -= fight.Party[0].EquippedStyle.AttackList[_cursorPosX + (2 * _cursorPosY)].PMCost;
+                    }
+                }
+            }
+            
             //Main Fight Menu
             if (_selectMode == 0)
             {

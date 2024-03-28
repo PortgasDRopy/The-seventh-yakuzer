@@ -54,8 +54,10 @@ namespace The_seventh_yakuzer
         {
             if (Randomizer.Next(101) <= Party[0].EquippedStyle.AttackList[0].Precision - Ennemy[0].EquippedStyle.StatDict["Agility"] + Party[0].EquippedStyle.StatDict["Agility"])
             {
+                Turn = (Turn + 1) % 2;
                 return true;
             }
+            Turn = (Turn + 1) % 2;
             return false;
         }
 
@@ -63,14 +65,17 @@ namespace The_seventh_yakuzer
         {
             if (Randomizer.Next(101) <= attack.Precision - Ennemy[0].EquippedStyle.StatDict["Agility"] + Party[0].EquippedStyle.StatDict["Agility"])
             {
+                Turn = (Turn + 1) % 2;
                 return true;
             }
+            Turn = (Turn + 1) % 2;
             return false;
         }
 
         public void UseItem(Item item, Character user)
         {
             item.Use(user);
+            Turn = (Turn + 1) % 2;
         }
     }
 }

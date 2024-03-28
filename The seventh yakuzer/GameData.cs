@@ -42,12 +42,12 @@ namespace The_seventh_yakuzer
         public static Attack BasicBladeIce { get; } = new Attack("Basic Blade Ice Attack", 0, new List<GameData.Type> { Type.BLADE, Type.ICE }, -10, 0, 15, 90, null);
         public static Attack BasicBladeElec { get; } = new Attack("Basic Blade Elec Attack", 0, new List<GameData.Type> { Type.BLADE, Type.ELEC }, -10, 0, 15, 90, null);
         public static List<Attack> BasicAttack { get; } = new List<Attack>() { BasicBlunt, BasicBluntFire, BasicBluntIce, BasicBluntElec, BasicMagic, BasicFire, BasicIce, BasicElec, BasicGun, BasicGunFire, BasicGunIce, BasicGunElec, BasicBlade, BasicBladeFire, BasicBladeIce, BasicBladeElec };
-        public static List<Attack> KiryuBrawlAttacks { get; } = new List<Attack>();
+        public static List<Attack> KiryuBrawlAttacks { get; } = new List<Attack>() { BasicBlunt, BasicBluntFire, BasicBluntIce };
         public static List<Attack> KiryuRushAttacks { get; } = new List<Attack>();
         public static List<Attack> KiryuBeastAttacks { get; } = new List<Attack>();
         public static List<Attack> KiryuLegendAttacks { get; } = new List<Attack>();
-        public static List<Attack> NishikiAttacks { get; } = new List<Attack>();
-        public static List<Attack> KuzeAttacks { get; } = new List<Attack>();
+        public static List<Attack> NishikiAttacks { get; } = new List<Attack>() { BasicBluntElec, BasicMagic };
+        public static List<Attack> KuzeAttacks { get; } = new List<Attack>() { BasicIce, BasicElec, BasicGun, BasicGunFire, BasicGunIce, BasicGunElec, BasicBlade, BasicBladeFire, BasicBladeIce, BasicBladeElec };
         public static List<Attack> KuzePipeAttacks { get; } = new List<Attack>();
         public static List<Attack> KashiwagiAttacks { get; } = new List<Attack>();
         public static List<Attack> YonedaAttacks { get; } = new List<Attack>();

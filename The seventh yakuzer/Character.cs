@@ -14,8 +14,8 @@ namespace The_seventh_yakuzer
         public List<GameData.Type>? Type { get; private set; }
         public int Experience { get; private set; }
         public int Level { get; private set; }
-        public int PV { get; private set; }
-        public int PM { get; private set; }
+        public int PV { get; set; }
+        public int PM { get; set; }
         public List<GameData.Status> Status { get; private set; }
         public Dictionary<string, int>? StatDict { get; private set; }
         public List<Attack>? AttackList { get; private set; }
@@ -65,7 +65,7 @@ namespace The_seventh_yakuzer
             Sprite = sprite;
             StyleList = styleList;
             EquippedStyle = StyleList[0];
-            Status = new List<GameData.Status>();
+            Status = new List<GameData.Status>() { GameData.Status.GOOD };
             PV = EquippedStyle.StatDict["PV"];
             PM = EquippedStyle.StatDict["PM"];
             Experience = 0;

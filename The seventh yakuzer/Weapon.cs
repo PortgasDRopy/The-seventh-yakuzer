@@ -12,15 +12,13 @@ namespace The_seventh_yakuzer
         public int Rarity { get; private set; }
         public WeaponType WeaponType { get; private set; }
         public GameData.Type? Type { get; private set; }
-        public List<string>? EffectList { get; private set; }
         public Dictionary<string, int> StatDict { get; private set; }
-        public Weapon(string name, string sprite, int rarity, WeaponType weapontype, GameData.Type? type, List<string>? effectlist, int PV, int PM, int attack, int defense, int magic, int willpower, int agility)
-            : base(name, sprite)
+        public Weapon(string name, string sprite, int rarity, WeaponType weapontype, GameData.Type? type, List<string>? effectList, int PV, int PM, int attack, int defense, int magic, int willpower, int agility)
+            : base(name, sprite, effectList)
         { 
             Rarity = rarity;
             WeaponType = weapontype;
             Type = type;
-            EffectList = effectlist;
             StatDict = GameData.StatDictDefault;
             StatDict["PV"] = PV;
             StatDict["PM"] = PM;

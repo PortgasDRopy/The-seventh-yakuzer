@@ -12,14 +12,12 @@ namespace The_seventh_yakuzer
     {
         public int Rarity { get; private set; }
         public GameData.BodyPart BodyPart { get; private set; }
-        public List<string> EffectList { get; private set; }
         public Dictionary<string, int> StatDict { get; private set; }
         public Armor(string name, string sprite, int rarity, GameData.BodyPart bodyPart, List<string> effectList, int PV, int PM, int attack, int defense, int magic, int willpower, int agility)
-            : base (name, sprite)
+            : base (name, sprite, effectList)
         {
             Rarity = rarity;
             BodyPart = bodyPart;
-            EffectList = effectList;
             StatDict = GameData.StatDictDefault;
             StatDict["PV"] = PV;
             StatDict["PM"] = PM;

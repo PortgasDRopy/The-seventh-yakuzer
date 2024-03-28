@@ -457,12 +457,12 @@ namespace The_seventh_yakuzer
 
             //Set the first party member's infos on the UI
 
-            string curPlName = Party[0].EquippedStyle.Name;
-            int curPlHP = Party[0].EquippedStyle.PV;
-            int curPlHPM = Party[0].EquippedStyle.StatDict["PV"];
-            int curPlMP = Party[0].EquippedStyle.PM;
-            int curPlMPM = Party[0].EquippedStyle.StatDict["PM"];
-            string curPlStt = Party[0].EquippedStyle.Status[0].ToString();
+            string curPlName = fight.Party[0].EquippedStyle.Name;
+            int curPlHP = fight.Party[0].EquippedStyle.PV;
+            int curPlHPM = fight.Party[0].EquippedStyle.StatDict["PV"];
+            int curPlMP = fight.Party[0].EquippedStyle.PM;
+            int curPlMPM = fight.Party[0].EquippedStyle.StatDict["PM"];
+            string curPlStt = fight.Party[0].EquippedStyle.Status[0].ToString();
 
 
             //Draw said infos
@@ -1034,14 +1034,14 @@ namespace The_seventh_yakuzer
                     Console.Write("                         ");
                     Console.SetCursorPosition(155, 40);
 
-                    if (Party[0].AttackList[_cursorPosX + (2 * _cursorPosY)].Type.Count == 2)
+                    if (Party[0].EquippedStyle.AttackList[_cursorPosX + (2 * _cursorPosY)].Type.Count == 2)
                     {
                         Console.Write(Party[0].EquippedStyle.AttackList[_cursorPosX + (2 * _cursorPosY)].Type[0]);
                         Console.Write('/');
                         Console.Write(Party[0].EquippedStyle.AttackList[_cursorPosX + (2 * _cursorPosY)].Type[1]);
                     }
 
-                    if (Party[0].AttackList[_cursorPosX + (2 * _cursorPosY)].Type.Count == 1)
+                    if (Party[0].EquippedStyle.AttackList[_cursorPosX + (2 * _cursorPosY)].Type.Count == 1)
                     {
                         Console.Write(Party[0].EquippedStyle.AttackList[_cursorPosX + (2 * _cursorPosY)].Type[0]);
                     }
@@ -1071,7 +1071,7 @@ namespace The_seventh_yakuzer
                     Console.SetCursorPosition(155, 44);
                     Console.Write("                         ");
                     Console.SetCursorPosition(155, 44);
-                    if (Party[0].AttackList[_cursorPosX + (2 * _cursorPosY)].EffectList == null)
+                    if (Party[0].EquippedStyle.AttackList[_cursorPosX + (2 * _cursorPosY)].EffectList == null)
                     {
                         Console.Write("NO FCT");
                     }
@@ -1345,8 +1345,9 @@ namespace The_seventh_yakuzer
                 {
                     if (fight.Attack(fight.Party[0].AttackList[_cursorPosX + (2 * _cursorPosY)]))
                     {
-                        fight.Ennemy[0].PV -= fight.Party[0].EquippedStyle.AttackList[_cursorPosX + (2 * _cursorPosY)].DmgMax;
+                        fight.Ennemy[0].SetHP(fight.Party[0].EquippedStyle.AttackList[_cursorPosX + (2 * _cursorPosY)].DmgMax);
                         fight.Party[0].PM -= fight.Party[0].EquippedStyle.AttackList[_cursorPosX + (2 * _cursorPosY)].PMCost;
+                        DisplayTurnInfo(fight, " used " + fight.Party[0].EquippedStyle.AttackList[_cursorPosX + (2 * _cursorPosY)].Name + " and dealt " + (fight.Party[0].EquippedStyle.StatDict["Attack"] + fight.Party[0].EquippedStyle.AttackList[_cursorPosX + (2 * _cursorPosY)].DmgMax) + " Damages to " + fight.Ennemy[0].Name);
                     }
                 }
             }
@@ -1385,10 +1386,11 @@ namespace The_seventh_yakuzer
                 //Party
                 if (_cursorPosX == 0)
                 {
-                    if (fight.BasicAttack())
+                    if (fight.BasicAttack(fight.Party[0], fight.Ennemy[0]))
                     {
-                        fight.Ennemy[0].PV -= fight.Party[0].EquippedStyle.AttackList[0].DmgMax;
+                        fight.Ennemy[0].SetHP(fight.Party[0].EquippedStyle.AttackList[0].DmgMax);
                         fight.Party[0].PM -= fight.Party[0].EquippedStyle.AttackList[0].PMCost;
+                        DisplayTurnInfo(fight, " used " + fight.Party[0].EquippedStyle.AttackList[0].Name + " and dealt " + (fight.Party[0].EquippedStyle.StatDict["Attack"] + fight.Party[0].EquippedStyle.AttackList[0].DmgMax) + " Damages to " + fight.Ennemy[0].Name);
                     }
                 }
                 if (_cursorPosX == 2)
@@ -1404,6 +1406,8 @@ namespace The_seventh_yakuzer
                 {
                     if (fight.Run())
                     {
+                        DisplayTurnInfo(fight, "Running away");
+                        System.Threading.Thread.Sleep(2000);
                         Program.changeMode(Program.GameModes.MAP, fight);
                     }
                 }
@@ -1457,6 +1461,20 @@ namespace The_seventh_yakuzer
                         Environment.Exit(0);
                         break;
                 }
+            }
+        }
+
+        public void DisplayTurnInfo(Fight fight, string action)
+        {
+            if (fight.Turn == 1)
+            {
+                Console.SetCursorPosition(21, 39);
+                Console.Write(fight.Party[0].Name + action);
+            }
+            else
+            {
+                Console.SetCursorPosition(21, 44);
+                Console.Write(fight.Ennemy[0].Name + action);
             }
         }
     }

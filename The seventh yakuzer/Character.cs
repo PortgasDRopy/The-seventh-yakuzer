@@ -59,6 +59,8 @@ namespace The_seventh_yakuzer
             EquippedGears = new List<Gear>();
         }
 
+        public event Action OnChangeHP;
+        public event Action OnKO;
         public Character(string name, string sprite, List<Character> styleList)
         {
             Name = name;
@@ -81,6 +83,21 @@ namespace The_seventh_yakuzer
             foreach (var stat in EquippedStyle.StatDict)
             {
                 StatDict[stat.Key] += 1;
+            }
+        }
+
+        public void SetHP(int hPModifier)
+        {
+            if (PV - hPModifier <= 0)
+            {
+                PV = 0;
+                Status = new List<GameData.Status>() { GameData.Status.KO };
+                OnKO?.Invoke();
+            }
+            else
+            {
+                PV -= hPModifier;
+                OnChangeHP?.Invoke();
             }
         }
     }

@@ -1,5 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -18,6 +20,9 @@ namespace The_seventh_yakuzer
         public int _kiryuPosX;
         public int _kiryuPosY;
 
+        //1 = Easy, 2 = Normal, 3 = Hard, 4 = Legend
+        public int _initSave;
+
         //Upon entering the Fight Menu -> 0 : Attack, 1 : Skills, 2 : Party, 3 : Items, 4 : Run
         //In the Skills + Items Submenu, X = +1 and Y = +2
         //In the Party Submenu, Y = +1
@@ -33,6 +38,9 @@ namespace The_seventh_yakuzer
         //_selectMode 2 -> On both axises, [0-3, 0-1] : Skills + Items Submenu
         public int _selectMode;
 
+        public bool _game;
+        public bool _mainMenu;
+
         public struct mapGrid
         {
             public char display;
@@ -43,6 +51,23 @@ namespace The_seventh_yakuzer
         }
 
         public mapGrid[,] grid = new mapGrid[150,56];
+
+        public void SetMainMenu()
+        {
+            Console.SetCursorPosition(0, 0);
+            StreamReader sr = new StreamReader("../../../UI/MainMenu.txt");
+
+            for (int i = 0; i < 56; i++) 
+            {
+                _line = sr.ReadLine();
+                Console.Write(_line);
+            }
+
+            sr.Close();
+            _selectMode = 1;
+
+            SelectHoverMM(ConsoleColor.Blue);
+        }
 
         public void SetMenuTab()
         {
@@ -69,15 +94,57 @@ namespace The_seventh_yakuzer
             }
         }
 
-        public void SetSpritesTab()
+        public void SetSpritesTab(List<Character> Party)
         {
-            Console.SetCursorPosition(Console.WindowWidth - 13, 0);
-            Console.Write("Party Members");
-
             for (int i = 0; i < 56; i++)
             {
                 Console.SetCursorPosition(Console.WindowWidth - 28, i);
                 Console.Write("|");
+            }
+
+            Console.SetCursorPosition(0, 0);
+
+            for (int i = 0; i < Party.Count; i++)
+            {
+                for (int j = 0; j < 9; j++)
+                {
+                    Console.SetCursorPosition(184, Console.CursorTop + 1);
+                    Console.Write("######################");
+                }
+
+                Console.SetCursorPosition(184, Console.CursorTop + 2);
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.Write(Party[i].Name);
+
+                Console.SetCursorPosition(184, Console.CursorTop + 1);
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write("HP ");
+                Console.Write(Party[i].PV);
+                Console.Write('/');
+                Console.Write(Party[i].EquippedStyle.StatDict["PV"]);
+                Console.ForegroundColor = ConsoleColor.Gray;
+
+                Console.Write('|');
+
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write("MP ");
+                Console.Write(Party[i].PM);
+                Console.Write('/');
+                Console.Write(Party[i].EquippedStyle.StatDict["PM"]);
+                Console.ForegroundColor = ConsoleColor.Gray;
+
+                Console.Write('|');
+
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Write(Party[i].EquippedStyle.Status[0].ToString());
+                Console.ForegroundColor = ConsoleColor.Gray;
+
+                if (Console.CursorTop == 54)
+                {
+                    break;
+                }
+
+                Console.SetCursorPosition(184, Console.CursorTop + 2);
             }
         }
 
@@ -389,14 +456,14 @@ namespace The_seventh_yakuzer
 
 
             //Set the first party member's infos on the UI
-            string curPlName = fight.Party[0].Name;
-            int curPlHP = fight.Party[0].PV;
-            int curPlHPM;
-            fight.Party[0].StatDict.TryGetValue("PVMax", out curPlHPM);
-            int curPlMP = fight.Party[0].PM;
-            int curPlMPM;
-            fight.Party[0].StatDict.TryGetValue("MPMax", out curPlMPM);
-            string curPlStt = fight.Party[0].Status[0].ToString();
+
+            string curPlName = Party[0].EquippedStyle.Name;
+            int curPlHP = Party[0].EquippedStyle.PV;
+            int curPlHPM = Party[0].EquippedStyle.StatDict["PV"];
+            int curPlMP = Party[0].EquippedStyle.PM;
+            int curPlMPM = Party[0].EquippedStyle.StatDict["PM"];
+            string curPlStt = Party[0].EquippedStyle.Status[0].ToString();
+
 
             //Draw said infos
             int y = 46;
@@ -462,27 +529,27 @@ namespace The_seventh_yakuzer
                 {
                     case "skills":
 
-                        for (int i = 0; i < Party[0].AttackList.Count; i++)
+                        for (int i = 0; i < Party[0].EquippedStyle.AttackList.Count; i++)
                         {
                             if (i % 2 == 0)
                             {
                                 Console.SetCursorPosition(9, curX);
                                 Console.Write("-");
 
-                                if (Party[0].AttackList[i].Type.Count == 1)
+                                if (Party[0].EquippedStyle.AttackList[i].Type.Count == 1)
                                 {
-                                    Console.Write(Party[0].AttackList[i].Type[0]);
+                                    Console.Write(Party[0].EquippedStyle.AttackList[i].Type[0]);
                                 }
 
-                                if (Party[0].AttackList[i].Type.Count == 2)
+                                if (Party[0].EquippedStyle.AttackList[i].Type.Count == 2)
                                 {
-                                    Console.Write(Party[0].AttackList[i].Type[0]);
+                                    Console.Write(Party[0].EquippedStyle.AttackList[i].Type[0]);
                                     Console.Write('/');
-                                    Console.Write(Party[0].AttackList[i].Type[1]);
+                                    Console.Write(Party[0].EquippedStyle.AttackList[i].Type[1]);
                                 }
 
                                 Console.Write(" - ");
-                                Console.Write(Party[0].AttackList[i].Name);
+                                Console.Write(Party[0].EquippedStyle.AttackList[i].Name);
                             }
 
                             if (i % 2 == 1)
@@ -490,20 +557,20 @@ namespace The_seventh_yakuzer
                                 Console.SetCursorPosition(91, curX);
                                 Console.Write("-");
 
-                                if (Party[0].AttackList[i].Type.Count == 1)
+                                if (Party[0].EquippedStyle.AttackList[i].Type.Count == 1)
                                 {
-                                    Console.Write(Party[0].AttackList[i].Type[0]);
+                                    Console.Write(Party[0].EquippedStyle.AttackList[i].Type[0]);
                                 }
 
-                                if (Party[0].AttackList[i].Type.Count == 2)
+                                if (Party[0].EquippedStyle.AttackList[i].Type.Count == 2)
                                 {
-                                    Console.Write(Party[0].AttackList[i].Type[0]);
+                                    Console.Write(Party[0].EquippedStyle.AttackList[i].Type[0]);
                                     Console.Write('/');
-                                    Console.Write(Party[0].AttackList[i].Type[1]);
+                                    Console.Write(Party[0].EquippedStyle.AttackList[i].Type[1]);
                                 }
 
                                 Console.Write(" - ");
-                                Console.Write(Party[0].AttackList[i].Name);
+                                Console.Write(Party[0].EquippedStyle.AttackList[i].Name);
 
                                 curX += 3;
                             }
@@ -520,7 +587,7 @@ namespace The_seventh_yakuzer
                         {
                             Console.SetCursorPosition(9, curX);
                             Console.Write("-");
-                            Console.Write(Party[i].Name);
+                            Console.Write(Party[i].EquippedStyle.Name);
 
                             curX += 3;
                         }
@@ -530,6 +597,179 @@ namespace The_seventh_yakuzer
 
             }
 
+        }
+
+
+        public void SetSubmenuMM()
+        {
+
+            if (_curSMenu == "new")
+            {
+                Console.SetCursorPosition(70, 17);
+                Console.Write("._______________________________________________________________________.");
+                Console.SetCursorPosition(70, 18);
+                Console.Write("|                              |                                        |");
+                Console.SetCursorPosition(70, 19);
+                Console.Write("|   Select a Difficulty :      |                                        |");
+                Console.SetCursorPosition(70, 20);
+                Console.Write("|                              |                                        |");
+                Console.SetCursorPosition(70, 21);
+                Console.Write("|                              |                                        |");
+                Console.SetCursorPosition(70, 22);
+                Console.Write("|                              |                                        |");
+                Console.SetCursorPosition(70, 23);
+                Console.Write("|                              |                                        |");
+                Console.SetCursorPosition(70, 24);
+                Console.Write("|                              |                                        |");
+                Console.SetCursorPosition(70, 25);
+                Console.Write("|                              |                                        |");
+                Console.SetCursorPosition(70, 26);
+                Console.Write("|                              |                                        |");
+                Console.SetCursorPosition(70, 27);
+                Console.Write("|                              |                                        |");
+                Console.SetCursorPosition(70, 28);
+                Console.Write("|                              |                                        |");
+                Console.SetCursorPosition(70, 29);
+                Console.Write("|                              |                                        |");
+                Console.SetCursorPosition(70, 30);
+                Console.Write("|                              |                                        |");
+                Console.SetCursorPosition(70, 31);
+                Console.Write("|                              |                                        |");
+                Console.SetCursorPosition(70, 32);
+                Console.Write("|                              |                                        |");
+                Console.SetCursorPosition(70, 33);
+                Console.Write("|______________________________|________________________________________|");
+
+                Console.SetCursorPosition(76, 22);
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.Write("-Easy");
+
+                Console.SetCursorPosition(76, 25);
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write("-Normal");
+
+                Console.SetCursorPosition(76, 28);
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write("-Hard");
+
+                Console.SetCursorPosition(76, 31);
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.Write("-Legend");
+
+                Console.ForegroundColor = ConsoleColor.Gray;
+            }
+
+            if (_curSMenu == "load")
+            {
+                Console.SetCursorPosition(70, 17);
+                Console.Write("._______________________________________________________________________.");
+                Console.SetCursorPosition(70, 18);
+                Console.Write("|                              |                                        |");
+                Console.SetCursorPosition(70, 19);
+                Console.Write("|   Select a Save File :       |                                        |");
+                Console.SetCursorPosition(70, 20);
+                Console.Write("|                              |                                        |");
+                Console.SetCursorPosition(70, 21);
+                Console.Write("|                              |                                        |");
+                Console.SetCursorPosition(70, 22);
+                Console.Write("|                              |                                        |");
+                Console.SetCursorPosition(70, 23);
+                Console.Write("|                              |                                        |");
+                Console.SetCursorPosition(70, 24);
+                Console.Write("|                              |                                        |");
+                Console.SetCursorPosition(70, 25);
+                Console.Write("|                              |                                        |");
+                Console.SetCursorPosition(70, 26);
+                Console.Write("|                              |                                        |");
+                Console.SetCursorPosition(70, 27);
+                Console.Write("|                              |                                        |");
+                Console.SetCursorPosition(70, 28);
+                Console.Write("|                              |                                        |");
+                Console.SetCursorPosition(70, 29);
+                Console.Write("|                              |                                        |");
+                Console.SetCursorPosition(70, 30);
+                Console.Write("|                              |                                        |");
+                Console.SetCursorPosition(70, 31);
+                Console.Write("|                              |                                        |");
+                Console.SetCursorPosition(70, 32);
+                Console.Write("|                              |                                        |");
+                Console.SetCursorPosition(70, 33);
+                Console.Write("|______________________________|________________________________________|");
+
+                bool isFile1 = File.Exists("../../..Saves/Save01.txt");
+                Console.SetCursorPosition(76, 22);
+                Console.Write("-Empty");
+                if (isFile1)
+                {
+                    Console.SetCursorPosition(77, 22);
+                    Console.Write("Savefile 1");
+                }
+
+                bool isFile2 = File.Exists("../../..Saves/Save02.txt");
+                Console.SetCursorPosition(76, 25);
+                Console.Write("-Empty");
+                if (isFile2)
+                {
+                    Console.SetCursorPosition(77, 25);
+                    Console.Write("Savefile 1");
+                }
+
+                bool isFile3 = File.Exists("../../..Saves/Save03.txt");
+                Console.SetCursorPosition(76, 28);
+                Console.Write("-Empty");
+                if (isFile3)
+                {
+                    Console.SetCursorPosition(77, 28);
+                    Console.Write("Savefile 1");
+                }
+
+                bool isFile4 = File.Exists("../../..Saves/Save04.txt");
+                Console.SetCursorPosition(76, 31);
+                Console.Write("-Empty");
+                if (isFile4)
+                {
+                    Console.SetCursorPosition(77, 31);
+                    Console.Write("Savefile 1");
+                }
+            }
+        }
+
+
+        public void MoveCursorMM(string dir)
+        {
+            if (dir == "u" && _cursorPosY != 0)
+            {
+                if (_curSMenu != null)
+                {
+                    SetSubmenuMM();
+                }
+
+                if (_curSMenu == null)
+                {
+                    SelectHoverMM(ConsoleColor.Gray);
+                }
+                _cursorPosY -= 1;
+                SelectHoverMM(ConsoleColor.Blue);
+            }
+
+            if (_curSMenu == null)
+            {
+                if (dir == "d" && _cursorPosY != 2)
+                {
+                    SelectHoverMM(ConsoleColor.Gray);
+                    _cursorPosY += 1;
+                    SelectHoverMM(ConsoleColor.Blue);
+                }
+            }
+            if (_curSMenu != null)
+            {
+                if (dir == "d" && _cursorPosY != 3)
+                {
+                    SetSubmenuMM();
+                    _cursorPosY += 1;
+                    SelectHoverMM(ConsoleColor.Blue);
+                }
+            }
         }
 
         public void MoveCursor(string dir, List<Character> Party)
@@ -702,35 +942,35 @@ namespace The_seventh_yakuzer
                 Console.Write("         ");
                 Console.SetCursorPosition(155, 38);
 
-                if (Party[_cursorPosY].Type.Count == 2)
+                if (Party[_cursorPosY].EquippedStyle.Type.Count == 2)
                 {
-                    Console.Write(Party[_cursorPosY].Type[0]);
+                    Console.Write(Party[_cursorPosY].EquippedStyle.Type[0]);
                     Console.Write('/');
-                    Console.Write(Party[_cursorPosY].Type[1]);
+                    Console.Write(Party[_cursorPosY].EquippedStyle.Type[1]);
                 }
 
-                if (Party[_cursorPosY].Type.Count == 1)
+                if (Party[_cursorPosY].EquippedStyle.Type.Count == 1)
                 {
-                    Console.Write(Party[_cursorPosY].Type[0]);
+                    Console.Write(Party[_cursorPosY].EquippedStyle.Type[0]);
                 }
 
                 Console.SetCursorPosition(155, 39);
                 Console.Write("          ");
                 Console.SetCursorPosition(155, 39);
-                Console.Write(Party[_cursorPosY].PV);
+                Console.Write(Party[_cursorPosY].EquippedStyle.PV);
                 Console.Write('/');
                 int curPlHPM;
-                Party[0].StatDict.TryGetValue("PVMax", out curPlHPM);
+                Party[0].EquippedStyle.StatDict.TryGetValue("PV", out curPlHPM);
                 Console.Write(curPlHPM);
                 Console.Write(" HP");
 
                 Console.SetCursorPosition(155, 40);
                 Console.Write("          ");
                 Console.SetCursorPosition(155, 40);
-                Console.Write(Party[_cursorPosY].PM);
+                Console.Write(Party[_cursorPosY].EquippedStyle.PM);
                 Console.Write('/');
                 int curPlMPM;
-                Party[0].StatDict.TryGetValue("PMMax", out curPlMPM);
+                Party[0].EquippedStyle.StatDict.TryGetValue("PM", out curPlMPM);
                 Console.Write(curPlMPM);
                 Console.Write(" MP");
 
@@ -743,7 +983,7 @@ namespace The_seventh_yakuzer
                 Console.SetCursorPosition(155, 42);
                 Console.Write("          ");
                 Console.SetCursorPosition(155, 42);
-                Console.Write(Party[_cursorPosY].Status[0].ToString());
+                Console.Write(Party[_cursorPosY].EquippedStyle.Status[0].ToString());
 
                 //Attacks
                 Console.SetCursorPosition(179, 36);
@@ -752,12 +992,12 @@ namespace The_seventh_yakuzer
                 int loopNb = 0;
                 int curX = 38;
 
-                for (int i = 0; Party[_cursorPosY].AttackList.Count > i; i++)
+                for (int i = 0; Party[_cursorPosY].EquippedStyle.AttackList.Count > i; i++)
                 {
                     Console.SetCursorPosition(179, curX);
                     Console.Write("                       ");
                     Console.SetCursorPosition(179, curX);
-                    Console.Write(Party[_cursorPosY].AttackList[i].Name);
+                    Console.Write(Party[_cursorPosY].EquippedStyle.AttackList[i].Name);
                     curX += 1;
                     loopNb += 1;
 
@@ -788,7 +1028,7 @@ namespace The_seventh_yakuzer
                     Console.SetCursorPosition(155, 36);
                     Console.Write("                         ");
                     Console.SetCursorPosition(155, 36);
-                    Console.Write(Party[0].AttackList[_cursorPosX + (2 * _cursorPosY)].Name);
+                    Console.Write(Party[0].EquippedStyle.AttackList[_cursorPosX + (2 * _cursorPosY)].Name);
 
                     Console.SetCursorPosition(155, 40);
                     Console.Write("                         ");
@@ -796,34 +1036,36 @@ namespace The_seventh_yakuzer
 
                     if (Party[0].AttackList[_cursorPosX + (2 * _cursorPosY)].Type.Count == 2)
                     {
-                        Console.Write(Party[0].AttackList[_cursorPosX + (2 * _cursorPosY)].Type[0]);
+                        Console.Write(Party[0].EquippedStyle.AttackList[_cursorPosX + (2 * _cursorPosY)].Type[0]);
                         Console.Write('/');
-                        Console.Write(Party[0].AttackList[_cursorPosX + (2 * _cursorPosY)].Type[1]);
+                        Console.Write(Party[0].EquippedStyle.AttackList[_cursorPosX + (2 * _cursorPosY)].Type[1]);
                     }
 
                     if (Party[0].AttackList[_cursorPosX + (2 * _cursorPosY)].Type.Count == 1)
                     {
-                        Console.Write(Party[0].AttackList[_cursorPosX + (2 * _cursorPosY)].Type[0]);
+                        Console.Write(Party[0].EquippedStyle.AttackList[_cursorPosX + (2 * _cursorPosY)].Type[0]);
                     }
 
                     Console.SetCursorPosition(155, 41);
                     Console.Write("                         ");
                     Console.SetCursorPosition(155, 41);
-                    Console.Write(Party[0].AttackList[_cursorPosX + (2 * _cursorPosY)].PMCost);
+                    Console.Write(Party[0].EquippedStyle.AttackList[_cursorPosX + (2 * _cursorPosY)].PMCost);
                     Console.Write(" MP");
 
                     Console.SetCursorPosition(155, 42);
                     Console.Write("                         ");
                     Console.SetCursorPosition(155, 42);
-                    Console.Write(Party[0].AttackList[_cursorPosX + (2 * _cursorPosY)].DmgMin);
-                    Console.Write(" - ");
-                    Console.Write(Party[0].AttackList[_cursorPosX + (2 * _cursorPosY)].DmgMax);
+                    Console.Write(Party[0].EquippedStyle.StatDict["Attack"]);
+                    Console.Write(" + ");
+                    Console.Write(Party[0].EquippedStyle.AttackList[_cursorPosX + (2 * _cursorPosY)].DmgMin);
+                    Console.Write("~");
+                    Console.Write(Party[0].EquippedStyle.AttackList[_cursorPosX + (2 * _cursorPosY)].DmgMax);
                     Console.Write(" DMG");
 
                     Console.SetCursorPosition(155, 43);
                     Console.Write("                         ");
                     Console.SetCursorPosition(155, 43);
-                    Console.Write(Party[0].AttackList[_cursorPosX + (2 * _cursorPosY)].Precision);
+                    Console.Write(Party[0].EquippedStyle.AttackList[_cursorPosX + (2 * _cursorPosY)].Precision);
                     Console.Write(" PRC");
 
                     Console.SetCursorPosition(155, 44);
@@ -835,13 +1077,267 @@ namespace The_seventh_yakuzer
                     }
                     else
                     {
-                        Console.Write(Party[0].AttackList[_cursorPosX + (2 * _cursorPosY)].EffectList[0]);
+                        Console.Write(Party[0].EquippedStyle.AttackList[_cursorPosX + (2 * _cursorPosY)].EffectList[0]);
                     }
                 }
             }
         }
 
+
+        public void SelectHoverMM(ConsoleColor color)
+        {
+            if  (_curSMenu == null)
+            {
+                if (_cursorPosY == 0)
+                {
+                    Console.ForegroundColor = color;
+                    Console.SetCursorPosition(8, 20);
+                    Console.WriteLine("__   _   _                 _____");
+                    Console.SetCursorPosition(8, 21);
+                    Console.WriteLine("\\ \\ | \\ | |               |  __ \\");
+                    Console.SetCursorPosition(8, 22);
+                    Console.WriteLine(" \\ \\|  \\| | _____      __ | |  \\/ __ _ _ __ ___   ___");
+                    Console.SetCursorPosition(8, 23);
+                    Console.WriteLine("  > > . ` |/ _ \\ \\ /\\ / / | | __ / _` | '_ ` _ \\ / _ \\");
+                    Console.SetCursorPosition(8, 24);
+                    Console.WriteLine(" / /| |\\  |  __/\\ V  V /  | |_\\ \\ (_| | | | | | |  __/");
+                    Console.SetCursorPosition(8, 25);
+                    Console.WriteLine("/_/ \\_| \\_/\\___| \\_/\\_/    \\____/\\__,_|_| |_| |_|\\___|");
+                    Console.ForegroundColor = ConsoleColor.Gray;
+                }
+
+                if (_cursorPosY == 1)
+                {
+                    Console.ForegroundColor = color;
+                    Console.SetCursorPosition(8, 32);
+                    Console.WriteLine("__   _                     _   _____");
+                    Console.SetCursorPosition(8, 33);
+                    Console.WriteLine("\\ \\ | |                   | | |  __ \\");
+                    Console.SetCursorPosition(8, 34);
+                    Console.WriteLine(" \\ \\| |     ___   __ _  __| | | |  \\/ __ _ _ __ ___   ___");
+                    Console.SetCursorPosition(8, 35);
+                    Console.WriteLine("  > > |    / _ \\ / _` |/ _` | | | __ / _` | '_ ` _ \\ / _ \\");
+                    Console.SetCursorPosition(8, 36);
+                    Console.WriteLine(" / /| |___| (_) | (_| | (_| | | |_\\ \\ (_| | | | | | |  __/");
+                    Console.SetCursorPosition(8, 37);
+                    Console.WriteLine("/_/ \\_____/\\___/ \\__,_|\\__,_|  \\____/\\__,_|_| |_| |_|\\___|");
+                    Console.ForegroundColor = ConsoleColor.Gray;
+                }
+
+                if (_cursorPosY == 2)
+                {
+                    Console.ForegroundColor = color;
+                    Console.SetCursorPosition(8, 43);
+                    Console.WriteLine("__   _____     _ _");
+                    Console.SetCursorPosition(8, 44);
+                    Console.WriteLine("\\ \\ |  ___|   (_) |");
+                    Console.SetCursorPosition(8, 45);
+                    Console.WriteLine(" \\ \\| |____  ___| |_");
+                    Console.SetCursorPosition(8, 46);
+                    Console.WriteLine("  > >  __\\ \\/ / | __|");
+                    Console.SetCursorPosition(8, 47);
+                    Console.WriteLine(" / /| |___>  <| | |_");
+                    Console.SetCursorPosition(8, 48);
+                    Console.WriteLine("/_/ \\____/_/\\_\\_|\\__|");
+                    Console.ForegroundColor = ConsoleColor.Gray;
+                }
+            }
+
+            if (_curSMenu == "new")
+            {
+                if (_cursorPosY == 0)
+                {
+                    Console.SetCursorPosition(76, 22);
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.Write(">");
+
+                    Console.ForegroundColor = ConsoleColor.Gray;
+                    Console.SetCursorPosition(104, 19);
+                    Console.Write("-For those who want to focus on the");
+                    Console.SetCursorPosition(104, 20);
+                    Console.Write("story of the game.");
+
+                    Console.SetCursorPosition(104, 21);
+                    Console.Write("-Weak ennemies.");
+
+                    Console.SetCursorPosition(104, 22);
+                    Console.Write("-No status aliements.");
+
+                    Console.SetCursorPosition(104, 23);
+                    Console.Write("-No debuffs.");
+
+                    Console.SetCursorPosition(104, 24);
+                    Console.Write("-No switch.");
+
+                    Console.SetCursorPosition(104, 25);
+                    Console.Write("-They rarely use special moves.");
+
+                    Console.SetCursorPosition(104, 26);
+                    Console.Write("-No Leaders in REs.");
+                }
+
+                if (_cursorPosY == 1)
+                {
+                    Console.SetCursorPosition(76, 25);
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.Write(">");
+
+                    Console.ForegroundColor = ConsoleColor.Gray;
+                    Console.SetCursorPosition(104, 19);
+                    Console.Write("-A starter difficulty recommended for");
+                    Console.SetCursorPosition(104, 20);
+                    Console.Write("newcommers or casual players!");
+
+                    Console.SetCursorPosition(104, 21);
+                    Console.Write("-Negative effects and debuffs");
+                    Console.SetCursorPosition(104, 22);
+                    Console.Write("are quite rare and toned-down.");
+
+                    Console.SetCursorPosition(104, 23);
+                    Console.Write("-The ennemies are balanced.");
+
+                    Console.SetCursorPosition(104, 24);
+                    Console.Write("-They never switch mid fight.");
+
+                    Console.SetCursorPosition(104, 25);
+                    Console.Write("-They also rarely use special moves.");
+
+                    Console.SetCursorPosition(104, 26);
+                    Console.Write("-Leaders rarely appear in REs.");
+
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.SetCursorPosition(104, 28);
+                    Console.Write("DON'T BE ASHAMED TO START HERE :)");
+                    Console.ForegroundColor = ConsoleColor.Gray;
+                }
+
+                if (_cursorPosY == 2)
+                {
+                    Console.SetCursorPosition(76, 28);
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.Write(">");
+
+                    Console.ForegroundColor = ConsoleColor.Gray;
+                    Console.SetCursorPosition(104, 19);
+                    Console.Write("-Real YAKUZA play on this difficulty!");
+
+                    Console.SetCursorPosition(104, 20);
+                    Console.Write("-The ennemies are stronger and more");
+                    Console.SetCursorPosition(104, 21);
+                    Console.Write("intelligent.");
+
+                    Console.SetCursorPosition(104, 22);
+                    Console.Write("-They frequently use debuff moves.");
+
+                    Console.SetCursorPosition(104, 23);
+                    Console.Write("-Your party gets more affected by");
+                    Console.SetCursorPosition(104, 24);
+                    Console.Write("status ailments.");
+
+                    Console.SetCursorPosition(104, 25);
+                    Console.Write("-The ennemies will use spe atcks.");
+
+                    Console.SetCursorPosition(104, 26);
+                    Console.Write("-The ennemies will often switch to");
+                    Console.SetCursorPosition(104, 27);
+                    Console.Write("a better ennemi if they have the");
+                    Console.SetCursorPosition(104, 28);
+                    Console.Write("type disadventage.");
+
+                    Console.SetCursorPosition(104, 29);
+                    Console.Write("-Frequent leaders in REs.");
+
+                    Console.SetCursorPosition(104, 30);
+                    Console.Write("-Will always hit super effective");
+                    Console.SetCursorPosition(104, 31);
+                    Console.Write("moves if possible.");
+                }
+
+                if (_cursorPosY == 3)
+                {
+                    Console.SetCursorPosition(76, 31);
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
+                    Console.Write(">");
+
+                    Console.ForegroundColor = ConsoleColor.Gray;
+                    Console.SetCursorPosition(104, 19);
+                    Console.Write("-The ennemies at their");
+                    Console.ForegroundColor= ConsoleColor.DarkRed;
+                    Console.Write(" HARDEST.");
+                    Console.ForegroundColor = ConsoleColor.Gray;
+
+                    Console.SetCursorPosition(104, 20);
+                    Console.Write("-Status Effects are extremely likely");
+                    Console.SetCursorPosition(104, 21);
+                    Console.Write("to apply on your party.");
+                    Console.SetCursorPosition(104, 22);
+                    Console.Write("-The enemy AI will");
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
+                    Console.Write(" ALWAYS ");
+                    Console.ForegroundColor = ConsoleColor.Gray;
+                    Console.Write("adapt.");
+
+                    Console.SetCursorPosition(104, 23);
+                    Console.Write("-Debuffs are emplified and more");
+                    Console.SetCursorPosition(104, 24);
+                    Console.Write("frequent.");
+
+                    Console.SetCursorPosition(104, 25);
+                    Console.Write("-The ennemies will use");
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
+                    Console.Write(" MORE ");
+                    Console.ForegroundColor = ConsoleColor.Gray;
+                    Console.Write("spe atks.");
+
+                    Console.SetCursorPosition(104, 26);
+                    Console.Write("-Random encounters are even more");
+                    Console.SetCursorPosition(104, 27);
+                    Console.Write("likely to happen.");
+
+                    Console.SetCursorPosition(104, 28);
+                    Console.Write("-Low chance to have an extra leader");
+                    Console.SetCursorPosition(104, 29);
+                    Console.Write("in REs!");
+
+                    Console.SetCursorPosition(104, 30);
+                    Console.Write("-Ennemies will always try to hit");
+                    Console.SetCursorPosition(104, 31);
+                    Console.Write("super effect moves if possible.");
+                }
+            }
+
+            if (_curSMenu == "load")
+            {
+                if (_cursorPosY == 0)
+                {
+                    Console.SetCursorPosition(76, 22);
+                    Console.Write(">");
+                }
+
+                if (_cursorPosY == 1)
+                {
+                    Console.SetCursorPosition(76, 25);
+                    Console.Write(">");
+                }
+
+                if (_cursorPosY == 2)
+                {
+                    Console.SetCursorPosition(76, 28);
+                    Console.Write(">");
+                }
+
+                if (_cursorPosY == 3)
+                {
+                    Console.SetCursorPosition(76, 31);
+                    Console.Write(">");
+                }
+
+
+            }
+        }
+
         public void SelectOption(Fight fight)
+
         {
             if (_selectMode == 2)
             {
@@ -910,6 +1406,56 @@ namespace The_seventh_yakuzer
                     {
                         Program.changeMode(Program.GameModes.MAP, fight);
                     }
+                }
+            }
+        }
+
+        public void SelectOptionMM()
+        {
+            if (_curSMenu == "new")
+            {
+                switch (_cursorPosY)
+                {
+                    case 0:
+                        _initSave = 1;
+                        break;
+
+                    case 1:
+                        _initSave = 2;
+                        break;
+
+                    case 2:
+                        _initSave = 3;
+                        break;
+
+                    case 3:
+                        _initSave = 4;
+                        break;
+                }
+            }
+
+            if (_curSMenu == null)
+            {
+                _prevCurY = _cursorPosY;
+
+                switch (_cursorPosY)
+                {
+                    case 0:
+                        _curSMenu = "new";
+                        SetSubmenuMM();
+                        SelectHoverMM(ConsoleColor.Black);
+                        break;
+
+                    case 1:
+                        _cursorPosY = 0;
+                        _curSMenu = "load";
+                        SetSubmenuMM();
+                        SelectHoverMM(ConsoleColor.Black);
+                        break;
+
+                    case 2:
+                        Environment.Exit(0);
+                        break;
                 }
             }
         }

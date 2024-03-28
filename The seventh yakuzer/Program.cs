@@ -25,27 +25,114 @@ namespace The_seventh_yakuzer
 
         static void Main(string[] args)
         {
-
-            GameData.SetWeaponList();
-            List<Character> Party = new List<Character>() { GameData.KiryuBrawl, GameData.Nishiki, GameData.Kuze };
-
-            Fight fight = new Fight(Party, Party);
-
-            bool game = true;
-            int currentMapX = 0;
-            int currentMapY = 0;
-
             Console.SetWindowPosition(0, 0);
             Console.CursorVisible = false;
 
-            gs.SetMenuTab();
-            gs.SetSpritesTab();
-            gs.SetMaps();
-            gs.SetMapTab(currentMapX, currentMapY);
-            gs.InitKiryu(100, 20);
+            GameScreen gs = new GameScreen();
+            GameState gameState = new GameState();
+          
+            bool mainMenu = true;
+            bool game = true;
+            string dir;
+
+            gs.SetMainMenu();
 
             while (game)
             {
+
+                while (mainMenu)
+                {
+
+                    switch (Console.ReadKey(true).Key)
+                    {
+
+                        case ConsoleKey.Enter:
+                            gs.SelectHoverMM(ConsoleColor.DarkBlue);
+                            gs.SelectOptionMM();
+                            break;
+
+                        case ConsoleKey.Escape:
+                            if (gs._curSMenu != null)
+                            {
+                                gs._cursorPosY = gs._prevCurY;
+                                gs._curSMenu = null;
+                                gs.SetMainMenu();
+                                gs.SelectHoverMM(ConsoleColor.Blue);
+                            }
+                            break;
+
+                        case ConsoleKey.UpArrow:
+                            dir = "u";
+                            gs.MoveCursorMM(dir);
+                            break;
+
+                        case ConsoleKey.W:
+                            dir = "u";
+                            gs.MoveCursorMM(dir);
+                            break;
+
+                        case ConsoleKey.DownArrow:
+                            dir = "d";
+                            gs.MoveCursorMM(dir);
+                            break;
+
+                        case ConsoleKey.S:
+                            dir = "d";
+                            gs.MoveCursorMM(dir);
+                            break;
+                    }
+
+                    if (gs._initSave != 0)
+                    {
+                        List<Character> gsParty = new List<Character>() { GameData.Kiryu };
+                        Dictionary<string, List<Item>> gsInventory = new Dictionary<string, List<Item>>();
+                        DateTime dateTime = DateTime.Now;
+                        List<int> currentMap = new List<int>() { 0, 0, 73, 50 };
+
+                        if (gs._initSave == 1)
+                        {
+                            gameState.Init(gsParty, gsInventory, 0, dateTime, 10000, currentMap);
+                        }
+
+                        if (gs._initSave == 2)
+                        {
+                            gameState.Init(gsParty, gsInventory, 1, dateTime, 5000, currentMap);
+                        }
+
+                        if (gs._initSave == 3)
+                        {
+                            gameState.Init(gsParty, gsInventory, 2, dateTime, 1000, currentMap);
+                        }
+
+                        if (gs._initSave == 4)
+                        {
+                            gameState.Init(gsParty, gsInventory, 3, dateTime, 500, currentMap);
+                        }
+
+                        break;
+                    }
+                }
+
+                List<Character> Party = gameState.Party;
+                Dictionary<string, List<Item>> inventory = gameState.Inventory;
+                GameData.SetWeaponList();
+              
+                Fight fight = new Fight(Party, Party);
+
+                GameModes gMode = GameModes.MAP;
+
+                int currentMapX = gameState.CurrentMap[0];
+                int currentMapY = gameState.CurrentMap[1];
+
+                Console.Clear();
+
+                gs.SetMenuTab();
+                gs.SetSpritesTab(Party);
+                gs.SetMaps();
+                gs.SetMapTab(currentMapX, currentMapY);
+                gs.InitKiryu(gameState.CurrentMap[2], gameState.CurrentMap[3]);
+
+            
 
                 while (gMode == GameModes.MAP)
                 {
@@ -166,9 +253,7 @@ namespace The_seventh_yakuzer
                 }
 
                 while (gMode == GameModes.FIGHT)
-                {
-
-                    string dir;
+                { 
 
                     switch (Console.ReadKey(true).Key)
                     {
@@ -260,7 +345,7 @@ namespace The_seventh_yakuzer
                             gMode = GameModes.MAP;
                             Console.Clear();
                             gs.SetMenuTab();
-                            gs.SetSpritesTab();
+                            gs.SetSpritesTab(Party);
                             gs.SetMapTab(currentMapX, currentMapY);
                             gs.InitKiryu(gs._kiryuPosX - 1, gs._kiryuPosY);
                             break;

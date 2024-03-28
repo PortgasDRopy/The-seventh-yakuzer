@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -15,17 +15,20 @@ namespace The_seventh_yakuzer
         public int Diff {  get; private set; }
         public DateTime TimePlayed { get; private set; }
         public int Money { get; private set; }
-        public int[,] Position { get; private set; }
-        public List<int> ActualMap {  get; private set; }
-        public GameState(List<Character> party, Dictionary<string, List<Item>>? inventory, int diff, DateTime timePlayed, int money, int[,] position, List<int> actualMap)
+        public List<int> CurrentMap { get; private set; }
+        public GameState()
+        {
+            
+        }
+
+        public void Init(List<Character> party, Dictionary<string, List<Item>> inventory, int diff, DateTime timePlayed, int money, List<int> currentMap)
         {
             Party = party;
             Inventory = inventory;
             TimePlayed = timePlayed;
             Money = money;
-            Position = position;
+            CurrentMap = currentMap;
             Time = DateTime.Now;
-            ActualMap = actualMap;
             Diff = diff;
         }
     }

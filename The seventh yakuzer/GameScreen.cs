@@ -501,8 +501,9 @@ namespace The_seventh_yakuzer
             SelectHover(ConsoleColor.Blue, Party);
         }
 
-        public void SetSubmenu(string sMenu, List<Character> Party)
+        public void SetSubmenu(string sMenu, List<Character> Party, Dictionary<string, List<Item>> Inventory)
         {
+
             if (sMenu == "skills" || sMenu == "items" || sMenu == "party")
             {
                 int curX = 36;
@@ -589,6 +590,65 @@ namespace The_seventh_yakuzer
                         break;
                 }
 
+            }
+
+            if (sMenu == "MItems" || sMenu == "MParty")
+            {
+                Console.SetCursorPosition(31, 0);
+                StreamReader sr = new StreamReader("../../../UI/PartyItems.txt");
+                _line = sr.ReadLine();
+
+
+                for (int i = 0; i < 56; i++)
+                {
+
+                    Console.Write(_line);
+                    int posX = Console.GetCursorPosition().Left - 150;
+                    int posY = Console.GetCursorPosition().Top + 1;
+
+                    if (posY != 56)
+                    {
+                        Console.SetCursorPosition(posX, posY);
+                    }
+
+                    _line = sr.ReadLine();
+                }
+
+                sr.Close();
+
+                if (sMenu == "MItems")
+                {
+                    Console.SetCursorPosition(31, 0);
+                    Console.Write("Items:");
+
+                    foreach (string key in Inventory.Keys)
+                    {
+                        Console.SetCursorPosition(31, 0);
+
+                        if (key == "heal")
+                        {
+                            for (int i = 0; i < Inventory["heal"].Count; i++)
+                            {
+                                //Console.SetCursorPosition();
+                            }
+                        }
+                    }
+                }
+
+                if (sMenu == "MParty")
+                {
+                    Console.SetCursorPosition(35, 1);
+                    Console.Write("Party:");
+
+                    Console.SetCursorPosition(43, 7);
+
+                    for (int i = 0; i < Party.Count; i++)
+                    {
+                        Console.Write("-" + Party[i].EquippedStyle.Name);
+                        Console.SetCursorPosition(43, Console.CursorTop + 12);
+                    } 
+
+                }
             }
 
         }
@@ -826,6 +886,206 @@ namespace The_seventh_yakuzer
 
         public void SelectHover(ConsoleColor color, List<Character> Party)
         {
+            if (_curSMenu == "MParty")
+            {
+                Console.SetCursorPosition(43, _cursorPosY * 12 + 7);
+                Console.ForegroundColor = color;
+                Console.Write('-');
+                Console.ForegroundColor = ConsoleColor.Gray;
+
+                Console.SetCursorPosition(0, 2);
+
+                for (int j = 0; j < 9; j++)
+                {
+                    Console.SetCursorPosition(152, Console.CursorTop + 1);
+                    Console.Write("######################");
+                }
+
+                Console.SetCursorPosition(148, 18);
+                Console.Write("                                 ");
+                Console.SetCursorPosition(148, 18);
+                Console.Write(Party[_cursorPosY].EquippedStyle.Name);
+                Console.SetCursorPosition(148, 19);
+                Console.Write("                                 ");
+                Console.SetCursorPosition(148, 19);
+
+                if (Party[_cursorPosY].EquippedStyle.Type.Count == 2)
+                {
+                    Console.Write(Party[_cursorPosY].EquippedStyle.Type[0] + "/" + Party[_cursorPosY].EquippedStyle.Type[1]);
+                }
+
+                if (Party[_cursorPosY].EquippedStyle.Type.Count == 1)
+                {
+                    Console.Write(Party[_cursorPosY].EquippedStyle.Type[0]);
+                }
+
+
+                Console.SetCursorPosition(153, 21);
+                Console.Write("                            ");
+                Console.SetCursorPosition(153, 21);
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write("HP " + Party[_cursorPosY].EquippedStyle.PV + "/" + Party[_cursorPosY].EquippedStyle.StatDict["PV"]);
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.Write("  |  ");
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.Write("LVL " + Party[_cursorPosY].Level);
+
+                Console.SetCursorPosition(153, 22);
+                Console.Write("                            ");
+                Console.SetCursorPosition(153, 22);
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write("MP " + Party[_cursorPosY].EquippedStyle.PV + "/" + Party[_cursorPosY].EquippedStyle.StatDict["PM"]);
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.Write("  |  ");
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.Write("EXP " + Party[_cursorPosY].Experience);
+
+
+                Console.SetCursorPosition(153, 24);
+                Console.Write("                            ");
+                Console.SetCursorPosition(153, 24);
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.Write("Atk: " + Party[_cursorPosY].EquippedStyle.StatDict["Attack"]);
+
+                Console.SetCursorPosition(153, 25);
+                Console.Write("                            ");
+                Console.SetCursorPosition(153, 25);
+                Console.ForegroundColor = ConsoleColor.DarkBlue;
+                Console.Write("Def: " + Party[_cursorPosY].EquippedStyle.StatDict["Defense"]);
+
+                Console.SetCursorPosition(153, 26);
+                Console.Write("                            ");
+                Console.SetCursorPosition(153, 26);
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Write(Party[_cursorPosY].Status[0].ToString());
+
+                Console.SetCursorPosition(163, 24);
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                Console.Write("Mgk: " + Party[_cursorPosY].EquippedStyle.StatDict["Magic"]);
+
+                Console.SetCursorPosition(163, 25);
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.Write("WlP: " + Party[_cursorPosY].EquippedStyle.StatDict["Willpower"]);
+
+                Console.SetCursorPosition(163, 26);
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.Write("Agl: " + Party[_cursorPosY].EquippedStyle.StatDict["Agility"]);
+
+
+                Console.SetCursorPosition(153, 28);
+                Console.Write("                            ");
+                Console.SetCursorPosition(153, 28);
+                Console.ForegroundColor = ConsoleColor.White;
+                if (Party[_cursorPosY].EquippedStyle.EquippedWeapon != null)
+                {
+                    Console.Write("Wpn: " + Party[_cursorPosY].EquippedStyle.EquippedWeapon.Name);
+                }
+                else
+                {
+                    Console.Write("Wpn: No Wpn");
+                }
+
+                Console.SetCursorPosition(153, 30);
+                Console.Write("                            ");
+                Console.SetCursorPosition(153, 30);
+                Console.ForegroundColor = ConsoleColor.White;
+                if (Party[_cursorPosY].EquippedStyle.EquippedArmor.Count == 0)
+                {
+                    Console.Write("Arm 1: No Arm");
+                    Console.SetCursorPosition(153, 31);
+                    Console.Write("                            ");
+                    Console.SetCursorPosition(153, 31);
+                    Console.Write("Arm 2: No Arm");
+                    Console.SetCursorPosition(153, 32);
+                    Console.Write("                            ");
+                    Console.SetCursorPosition(153, 32);
+                    Console.Write("Arm 3: No Arm");
+                }
+                if (Party[_cursorPosY].EquippedStyle.EquippedArmor.Count == 1)
+                {
+                    Console.Write("Arm 1: " + Party[_cursorPosY].EquippedStyle.EquippedArmor[0].Name);
+                    Console.SetCursorPosition(153, 31);
+                    Console.Write("                            ");
+                    Console.SetCursorPosition(153, 31);
+                    Console.Write("Arm 2: No Arm");
+                    Console.SetCursorPosition(153, 32);
+                    Console.Write("                            ");
+                    Console.SetCursorPosition(153, 32);
+                    Console.Write("Arm 3: No Arm");
+                }
+                if (Party[_cursorPosY].EquippedStyle.EquippedArmor.Count == 2)
+                {
+                    Console.Write("Arm 1: " + Party[_cursorPosY].EquippedStyle.EquippedArmor[0].Name);
+                    Console.SetCursorPosition(153, 31);
+                    Console.Write("                            ");
+                    Console.SetCursorPosition(153, 31);
+                    Console.Write("Arm 2: " + Party[_cursorPosY].EquippedStyle.EquippedArmor[1].Name);
+                    Console.SetCursorPosition(153, 32);
+                    Console.Write("                            ");
+                    Console.SetCursorPosition(153, 32);
+                    Console.Write("Arm 3: No Arm");
+                }
+                if (Party[_cursorPosY].EquippedStyle.EquippedArmor.Count == 3)
+                {
+                    Console.Write("Arm 1: " + Party[_cursorPosY].EquippedStyle.EquippedArmor[0].Name);
+                    Console.SetCursorPosition(153, 31);
+                    Console.Write("                            ");
+                    Console.SetCursorPosition(153, 31);
+                    Console.Write("Arm 2: " + Party[_cursorPosY].EquippedStyle.EquippedArmor[1].Name);
+                    Console.SetCursorPosition(153, 32);
+                    Console.Write("                            ");
+                    Console.SetCursorPosition(153, 32);
+                    Console.Write("Arm 3: " + Party[_cursorPosY].EquippedStyle.EquippedArmor[2].Name);
+                }
+
+                Console.SetCursorPosition(153, 34);
+                Console.Write("                            ");
+                Console.SetCursorPosition(153, 34);
+                Console.ForegroundColor = ConsoleColor.White;
+                if (Party[_cursorPosY].EquippedStyle.EquippedGears.Count == 0)
+                {
+                    Console.Write("Gear 1: No Gear");
+                    Console.SetCursorPosition(153, 35);
+                    Console.Write("                            ");
+                    Console.SetCursorPosition(153, 35);
+                    Console.Write("Gear 2: No Gear");
+                }
+                if (Party[_cursorPosY].EquippedStyle.EquippedGears.Count == 1)
+                {
+                    Console.Write("Gear 1: " + Party[_cursorPosY].EquippedStyle.EquippedGears[0].Name);
+                    Console.SetCursorPosition(153, 35);
+                    Console.Write("                            ");
+                    Console.SetCursorPosition(153, 35);
+                    Console.Write("Gear 2: No Gear");
+                }
+                if (Party[_cursorPosY].EquippedStyle.EquippedGears.Count == 2)
+                {
+                    Console.Write("Gear 1: " + Party[_cursorPosY].EquippedStyle.EquippedGears[0].Name);
+                    Console.SetCursorPosition(153, 35);
+                    Console.Write("                            ");
+                    Console.SetCursorPosition(153, 35);
+                    Console.Write("Gear 2: " + Party[_cursorPosY].EquippedStyle.EquippedGears[1].Name);
+                }
+
+                Console.SetCursorPosition(150, 38);
+                Console.Write("Attacks :");
+                Console.SetCursorPosition(153, 40);
+
+                for (int i = 0; i < 10; i++)
+                {
+                    Console.Write("                           ");
+                    Console.SetCursorPosition(153, 40 + i + 1);
+                }
+
+                Console.SetCursorPosition(153, 40);
+                Console.ForegroundColor = ConsoleColor.Gray;
+                for (int i = 0; i < Party[_cursorPosY].EquippedStyle.AttackList.Count; i++)
+                {
+                    Console.Write(Party[_cursorPosY].EquippedStyle.AttackList[i].Name);
+                    Console.SetCursorPosition(153, 40 + i + 1);
+                }
+            }
+
             if (_selectMode == 0)
             {
                 if (_cursorPosX == 0)
@@ -922,7 +1182,7 @@ namespace The_seventh_yakuzer
                 }
             }
 
-            if (_selectMode == 1)
+            if (_selectMode == 1 && _curSMenu != "MParty")
             {
                 Console.SetCursorPosition(9, _cursorPosY * 3 + 36);
                 Console.ForegroundColor = color;
@@ -1010,7 +1270,7 @@ namespace The_seventh_yakuzer
 
             }
 
-            if (_selectMode == 2)
+            if (_selectMode == 2 && _curSMenu != "MParty")
             {
                 Console.SetCursorPosition(_cursorPosX * 82 + 9, _cursorPosY * 3 + 36);
                 Console.ForegroundColor = color;
@@ -1028,14 +1288,14 @@ namespace The_seventh_yakuzer
                     Console.Write("                         ");
                     Console.SetCursorPosition(155, 40);
 
-                    if (Party[0].AttackList[_cursorPosX + (2 * _cursorPosY)].Type.Count == 2)
+                    if (Party[0].EquippedStyle.AttackList[_cursorPosX + (2 * _cursorPosY)].Type.Count == 2)
                     {
                         Console.Write(Party[0].EquippedStyle.AttackList[_cursorPosX + (2 * _cursorPosY)].Type[0]);
                         Console.Write('/');
                         Console.Write(Party[0].EquippedStyle.AttackList[_cursorPosX + (2 * _cursorPosY)].Type[1]);
                     }
 
-                    if (Party[0].AttackList[_cursorPosX + (2 * _cursorPosY)].Type.Count == 1)
+                    if (Party[0].EquippedStyle.AttackList[_cursorPosX + (2 * _cursorPosY)].Type.Count == 1)
                     {
                         Console.Write(Party[0].EquippedStyle.AttackList[_cursorPosX + (2 * _cursorPosY)].Type[0]);
                     }
@@ -1065,7 +1325,7 @@ namespace The_seventh_yakuzer
                     Console.SetCursorPosition(155, 44);
                     Console.Write("                         ");
                     Console.SetCursorPosition(155, 44);
-                    if (Party[0].AttackList[_cursorPosX + (2 * _cursorPosY)].EffectList == null)
+                    if (Party[0].EquippedStyle.AttackList[_cursorPosX + (2 * _cursorPosY)].EffectList == null)
                     {
                         Console.Write("NO FCT");
                     }
@@ -1348,14 +1608,14 @@ namespace The_seventh_yakuzer
                     {
                         case 1:
                             sMenu = "skills";
-                            SetSubmenu(sMenu, Party);
+                            SetSubmenu(sMenu, Party, null);
                             SelectHover(ConsoleColor.Blue, Party);
                             _curSMenu = sMenu;
                             break;
 
                         case 3:
                             sMenu = "items";
-                            SetSubmenu(sMenu, Party);
+                            SetSubmenu(sMenu, Party, null);
                             SelectHover(ConsoleColor.Blue, Party);
                             _curSMenu = sMenu;
                             break;
@@ -1367,7 +1627,7 @@ namespace The_seventh_yakuzer
                 {
                     _selectMode = 1;
                     sMenu = "party";
-                    SetSubmenu(sMenu, Party);
+                    SetSubmenu(sMenu, Party, null);
                     SelectHover(ConsoleColor.Blue, Party);
                     _curSMenu = sMenu;
                 }

@@ -65,7 +65,7 @@ namespace The_seventh_yakuzer
             Sprite = sprite;
             StyleList = styleList;
             EquippedStyle = StyleList[0];
-            Status = new List<GameData.Status>();
+            Status = new List<GameData.Status>() { GameData.Status.GOOD };
             PV = EquippedStyle.StatDict["PV"];
             PM = EquippedStyle.StatDict["PM"];
             Experience = 0;

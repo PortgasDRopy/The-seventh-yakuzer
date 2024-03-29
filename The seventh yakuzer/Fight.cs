@@ -33,7 +33,7 @@ namespace The_seventh_yakuzer
         }
         public bool IsEnnemy(GameScreen gs)
         {
-            if (Randomizer.Next(101) <= gs.grid[gs._kiryuPosX, gs._kiryuPosY].danger)
+            if (Randomizer.Next(101) <= gs.grid[GameScreen._kiryuPosX, GameScreen._kiryuPosY].danger)
             {
                 return true;
             }

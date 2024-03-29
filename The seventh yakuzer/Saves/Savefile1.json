@@ -1,0 +1,40 @@
+{
+  "Inventory": [
+    {
+      "Name": "Staminan Light",
+      "Sprite": null,
+      "Power": 10,
+      "EffectList": [
+        "Healing",
+        "Empower"
+      ]
+    },
+    {
+      "Name": "Staminan Light",
+      "Sprite": null,
+      "Power": 10,
+      "EffectList": [
+        "Healing",
+        "Empower"
+      ]
+    }
+  ],
+  "Time": "2024-03-29T04:28:28.9045408+01:00",
+  "Diff": 3,
+  "TimePlayed": "2024-03-29T03:28:28.9045396Z",
+  "Money": 500,
+  "CurrentMap": [
+    0,
+    0,
+    73,
+    50
+  ],
+  "CurrentMapX": 0,
+  "CurrentMapY": 0,
+  "CurrentPosX": 44,
+  "CurrentPosY": 16,
+  "Char1Name": "Kazuma Kiryu",
+  "Char2Name": "Akira Nishikiyama",
+  "Char3Name": "Daisaku Kuze",
+  "Char4Name": null
+}

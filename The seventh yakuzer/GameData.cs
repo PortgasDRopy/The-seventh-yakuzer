@@ -21,10 +21,14 @@ namespace The_seventh_yakuzer
             {"Agility", 0},
         };
 
-        public enum Type {FIRE = 1, ICE = 2, ELEC = 3, BLUNT = 4, MAGIC = 5, GUN = 6, BLADE = 7};
-        public enum Status {BURN = 1, COLD = 2, PARA = 3, POISON = 4, BLEED = 5, DRUNK = 6, KO = 7, SLEEP = 8, FEAR = 9, DARKNESS = 10, RAGE = 11, SILENCE = 12, GOOD = 13};
-        public enum Weight { LIGHT = 1, MEDIUM = 2, HEAVY = 3};
+        public enum Type { FIRE = 1, ICE = 2, ELEC = 3, BLUNT = 4, MAGIC = 5, GUN = 6, BLADE = 7 };
+        public enum Status { BURN = 1, COLD = 2, PARA = 3, POISON = 4, BLEED = 5, DRUNK = 6, KO = 7, SLEEP = 8, FEAR = 9, DARKNESS = 10, RAGE = 11, SILENCE = 12, GOOD = 13 };
+        public enum Weight { LIGHT = 1, MEDIUM = 2, HEAVY = 3 };
         public enum BodyPart { HEAD = 1, BODY = 2, FEET = 3 };
+        public static Item StaminanLight { get; } = new Item("Staminan Light", null, new List<string> { "Healing", "Empower" }, 10);
+        public static Item StaminanX { get; } = new Item("Staminan X", null, new List<string> { "Healing", "Empower" }, 50);
+        public static Item Tauriner { get; } = new Item("Tauriner", null, new List<string> {"Empower" }, 20);
+        public static Item ToughnessLight { get; } = new Item("Toughness Light", null, new List<string> { "Heal" }, 20);
         public static Attack BasicBlunt { get; } = new Attack("Basic Blunt Attack", 0, new List<GameData.Type> { Type.BLUNT }, - 10, 0, 5, 90, null);
         public static Attack BasicBluntFire { get; } = new Attack("Basic Blunt Fire Attack", 0, new List<GameData.Type> { Type.BLUNT, Type.FIRE }, -10, 0, 10, 90, null);
         public static Attack BasicBluntIce { get; } = new Attack("Basic Blunt Ice Attack", 0, new List<GameData.Type> { Type.BLUNT, Type.ICE }, -10, 0, 10, 90, null);
@@ -114,12 +118,12 @@ namespace The_seventh_yakuzer
                 }
             }
         }
-        public static Weapon Unarmed { get; } = new Weapon("Unarmed", "", 0, Knuckles, null, null, 0, 0, 0, 0, 0, 0, 0);
-        public static Weapon SturdyIronPipe { get; } = new Weapon("Sturdy Iron Pipe", "", 0, PipesAndBatons, null, null, 0, 0, 0, 0, 0, 0, 0);
-        public static Weapon SturdyDagger { get; } = new Weapon("Sturdy Dagger", "", 0, Daggers, null, null, 0, 0, 0, 0, 0, 0, 0);
-        public static Weapon SturdyTonfa { get; } = new Weapon("Sturdy Tonfa", "", 0, Tonfas, null, null, 0, 0, 0, 0, 0, 0, 0);
-        public static Weapon SturdyBat { get; } = new Weapon("Sturdy Bat", "", 0, Bats, null, null, 0, 0, 0, 0, 0, 0, 0);
-        public static Weapon SturdyKnife { get; } = new Weapon("Sturdy Knife", "", 0, Knives, null, null, 0, 0, 0, 0, 0, 0, 0);
+        public static Weapon Unarmed { get; } = new Weapon("Unarmed", "", 0, Knuckles, null, null, 0, 0, 0, 0, 0, 0, 0, 0);
+        public static Weapon SturdyIronPipe { get; } = new Weapon("Sturdy Iron Pipe", "", 0, PipesAndBatons, null, null, 0, 0, 0, 0, 0, 0, 0, 0);
+        public static Weapon SturdyDagger { get; } = new Weapon("Sturdy Dagger", "", 0, Daggers, null, null, 0, 0, 0, 0, 0, 0, 0, 0);
+        public static Weapon SturdyTonfa { get; } = new Weapon("Sturdy Tonfa", "", 0, Tonfas, null, null, 0, 0, 0, 0, 0, 0, 0, 0);
+        public static Weapon SturdyBat { get; } = new Weapon("Sturdy Bat", "", 0, Bats, null, null, 0, 0, 0, 0, 0, 0, 0, 0);
+        public static Weapon SturdyKnife { get; } = new Weapon("Sturdy Knife", "", 0, Knives, null, null, 0, 0, 0, 0, 0, 0, 0, 0);
         public static Character KiryuBrawl { get;} = new Character("Kazuma Kiryu (Brawler)", "", new List<GameData.Type> {Type.BLUNT}, 10, 5, 7, 7, 5, 3, 3, KiryuBrawlAttacks, LightAndMedium, null);
         public static Character KiryuRush { get;} = new Character("Kazuma Kiryu (Rush)", "", new List<GameData.Type> { Type.ELEC }, 10, 5, 3, 3, 5, 3, 10, KiryuRushAttacks, new List<WeaponType> () { Knuckles, BaghNakas}, null);
         public static Character KiryuBeast { get;} = new Character("Kazuma Kiryu (Beast)", "", new List<GameData.Type> { Type.FIRE }, 10, 5, 10, 10, 5, 5, 1, KiryuBeastAttacks, WeaponTypes, null);
@@ -143,5 +147,6 @@ namespace The_seventh_yakuzer
         public static Character MajimaLegend { get; } = new Character("Goro Majima (Legend)", "", new List<GameData.Type> { Type.BLADE, Type.ELEC }, 6, 7, 6, 2, 8, 4, 9, MajimaLegendAttacks, new List<WeaponType>() { Daggers}, SturdyDagger);
         public static Character Majima { get; } = new Character("Goro Majima", "", new List<Character>() { MajimaThug, MajimaSlug, MajimaBreak, KiryuLegend });
         public static Character Lee { get; } = new Character("Wen Hai Lee", "", new List<GameData.Type> { Type.GUN }, 10, 6, 7, 6, 6, 4, 5, LeeAttacks, new List<WeaponType>() { Knives }, SturdyKnife);
+        public static List<Character> Characters { get; } = new List<Character>() { Kiryu, Nishiki, Kuze, Kashiwagi, Yoneda, Tachibana, Oda, Majima, Lee }; 
     }
 }

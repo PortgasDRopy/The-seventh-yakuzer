@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Net.Sockets;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using static The_seventh_yakuzer.GameData;
 
@@ -22,15 +24,22 @@ namespace The_seventh_yakuzer
 
         static public GameScreen gs = new GameScreen();
         static GameModes gMode = GameModes.MAP;
+        static public GameState gameState = new GameState();
+
+        static public List<Character> Party = new();
+        static public List<Item> inventory = null;
+
+
+        public static int currentMapX;
+        public static int currentMapY;
+
+        public static int money;
 
         static void Main(string[] args)
         {
             Console.SetWindowPosition(0, 0);
             Console.CursorVisible = false;
 
-            GameScreen gs = new GameScreen();
-            GameState gameState = new GameState();
-          
             bool mainMenu = true;
             bool game = true;
             string dir;
@@ -81,52 +90,69 @@ namespace The_seventh_yakuzer
 
                 if (gs._initSave != 0)
                 {
-                    List<Character> gsParty = new List<Character>() { GameData.Kiryu, GameData.Kuze, GameData.Nishiki };
-                    Dictionary<string, List<Item>> gsInventory = new Dictionary<string, List<Item>>();
-                    DateTime dateTime = DateTime.Now;
-                    List<int> currentMap = new List<int>() { 0, 0, 73, 50 };
-
-                    if (gs._initSave == 1)
+                    if (gs._initSave < 5)
                     {
-                        gameState.Init(gsParty, gsInventory, 0, dateTime, 10000, currentMap);
-                    }
+                        List<Character> gsParty = new List<Character>() { GameData.Kiryu, GameData.Kuze, GameData.Nishiki };
+                        List<Item> gsInventory = new List<Item>();
+                        DateTime dateTime = DateTime.Now;
+                        List<int> currentMap = new List<int>() { 0, 0, 73, 50 };
 
-                    if (gs._initSave == 2)
+                        if (gs._initSave == 1)
+                        {
+                            gameState.Init(gsParty, gsInventory, 0, dateTime, 10000, currentMap);
+                        }
+
+                        if (gs._initSave == 2)
+                        {
+                            gameState.Init(gsParty, gsInventory, 1, dateTime, 5000, currentMap);
+                        }
+
+                        if (gs._initSave == 3)
+                        {
+                            gameState.Init(gsParty, gsInventory, 2, dateTime, 1000, currentMap);
+                        }
+
+                        if (gs._initSave == 4)
+                        {
+                            gameState.Init(gsParty, gsInventory, 3, dateTime, 500, currentMap);
+                        }
+
+                        break;
+                    }
+                    
+                    if (gs._initSave > 4)
                     {
-                        gameState.Init(gsParty, gsInventory, 1, dateTime, 5000, currentMap);
-                    }
+                        gameState.Load(gs._initSave - 4);
 
-                    if (gs._initSave == 3)
-                    {
-                        gameState.Init(gsParty, gsInventory, 2, dateTime, 1000, currentMap);
+                        break;
                     }
-
-                    if (gs._initSave == 4)
-                    {
-                        gameState.Init(gsParty, gsInventory, 3, dateTime, 500, currentMap);
-                    }
-
-                    break;
                 }
             }
 
-                List<Character> Party = gameState.Party;
-                Dictionary<string, List<Item>> inventory = gameState.Inventory;
-                GameData.SetWeaponList();
+            Party.Add(GameData.Kiryu);
+            Party.Add(GameData.Nishiki);
+            Party.Add(GameData.Kuze);
+
+            inventory = gameState.Inventory;
+            GameData.SetWeaponList();
               
-                Fight fight = new Fight(Party, Party);
+            Fight fight = new Fight(Party, Party);
 
-                GameModes gMode = GameModes.MAP;
+            gs._cursorPosX = 0;
+            gs._cursorPosY = 0;
+            gs._selectMode = 0;
 
-            int currentMapX = gameState.CurrentMap[0];
-            int currentMapY = gameState.CurrentMap[1];
+            money = gameState.Money;
+
+            currentMapX = gameState.CurrentMap[0];
+            currentMapY = gameState.CurrentMap[1];
 
             Console.Clear();
 
             gs.SetMenuTab();
             gs.SetSpritesTab(Party);
             gs.SetMaps();
-            gs.SetMapTab(currentMapX, currentMapY);
+            gs.SetMapTab(gameState.CurrentMap[0], gameState.CurrentMap[1]);
             gs.InitKiryu(gameState.CurrentMap[2], gameState.CurrentMap[3]);
 
             while (game)
@@ -137,6 +163,7 @@ namespace The_seventh_yakuzer
                     switch (Console.ReadKey(true).Key)
                     {
                         case ConsoleKey.Enter:
+                            gs.Interact();
                             break;
 
                         case ConsoleKey.UpArrow:
@@ -249,6 +276,7 @@ namespace The_seventh_yakuzer
                             gs._cursorPosX = 0;
                             gs._cursorPosY = 0;
                             gs.SetSubmenu(gs._curSMenu, Party, inventory);
+                            gs.SelectHover(ConsoleColor.Blue, Party);
                             break;
 
                         case ConsoleKey.D6:
@@ -269,6 +297,7 @@ namespace The_seventh_yakuzer
 
                         case ConsoleKey.D8:
                             gMode = GameModes.DIALOG;
+                            gs.SetDialogueUI();
                             break;
 
                         case ConsoleKey.D9:
@@ -286,7 +315,7 @@ namespace The_seventh_yakuzer
 
                         case ConsoleKey.Enter:
                             gs.SelectHover(ConsoleColor.DarkBlue, Party);
-                            gs.SelectOption(fight);
+                            gs.SelectOption(fight, gameState);
                             break;
 
                         case ConsoleKey.Escape:
@@ -309,8 +338,19 @@ namespace The_seventh_yakuzer
 
                         case ConsoleKey.DownArrow:
                             dir = "d";
-                            gs.MoveCursor(dir, Party);
+                            if (gs._selectMode == 2 && gs._curSMenu != "MItems" && gs._curSMenu != "Items")
+                            {
+                                if (Party[0].EquippedStyle.AttackList.Count > (gs._cursorPosX + (gs._cursorPosY + 1) * 2))
+                                {
+                                    gs.MoveCursor(dir, Party);
+                                }
+                            }
+                            if (gs._selectMode != 2)
+                            {
+                                gs.MoveCursor(dir, Party);
+                            }
                             break;
+
 
                         case ConsoleKey.S:
                             dir = "d";
@@ -353,7 +393,7 @@ namespace The_seventh_yakuzer
                             gs.SetMenuTab();
                             gs.SetSpritesTab(Party);
                             gs.SetMapTab(currentMapX, currentMapY);
-                            gs.InitKiryu(gs._kiryuPosX - 1, gs._kiryuPosY);
+                            gs.InitKiryu(GameScreen._kiryuPosX - 1, GameScreen._kiryuPosY);
                             break;
                     }
 
@@ -372,7 +412,7 @@ namespace The_seventh_yakuzer
 
                         case ConsoleKey.Enter:
                             gs.SelectHover(ConsoleColor.DarkBlue, Party);
-                            gs.SelectOption(Party);
+                            gs.SelectOption(fight, gameState);
                             break;
 
                         case ConsoleKey.Escape:
@@ -380,12 +420,12 @@ namespace The_seventh_yakuzer
                             gs._cursorPosY = gs._prevCurY;
                             gs._selectMode = 0;
 
-                            if (gs._curSMenu == "MParty" || gs._curSMenu == "MItems")
+                            if (gs._curSMenu == "MParty" || gs._curSMenu == "MItems" || gs._curSMenu == "SLQ" || gs._curSMenu == "SLQSave" || gs._curSMenu == "SLQLoad")
                             {
                                 gMode = GameModes.MAP;
                                 gs._curSMenu = null;
                                 gs.SetMapTab(currentMapX, currentMapY);
-                                gs.InitKiryu(gs._kiryuPosX - 1, gs._kiryuPosY);
+                                gs.InitKiryu(GameScreen._kiryuPosX - 1, GameScreen._kiryuPosY);
                             }
 
                             break;
@@ -431,7 +471,6 @@ namespace The_seventh_yakuzer
                             break;
                     }
                 }
-                }
             }
         }
 
@@ -448,10 +487,24 @@ namespace The_seventh_yakuzer
                 gMode = GameModes.MAP;
                 Console.Clear();
                 gs.SetMenuTab();
-                gs.SetSpritesTab();
-                gs.SetMapTab(0, 0);
-                gs.InitKiryu(gs._kiryuPosX - 1, gs._kiryuPosY);
+                gs.SetSpritesTab(fight.Party);
+                gs.SetMapTab(currentMapX, currentMapY);
+                gs.InitKiryu(GameScreen._kiryuPosX - 1, GameScreen._kiryuPosY);
+            }
+        }
+
+        static public void changeMode(GameModes Mode)
+        {
+            if (Mode == GameModes.MAP)
+            {
+                gMode = GameModes.MAP;
+                Console.Clear();
+                gs.SetMenuTab();
+                gs.SetSpritesTab(Party);
+                gs.SetMapTab(currentMapX, currentMapY);
+                gs.InitKiryu(GameScreen._kiryuPosX - 1, GameScreen._kiryuPosY);
             }
         }
     }
 }
+

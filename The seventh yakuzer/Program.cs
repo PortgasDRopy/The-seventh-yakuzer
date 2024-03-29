@@ -46,10 +46,12 @@ namespace The_seventh_yakuzer
 
             gs.SetMainMenu();
 
+
             while (mainMenu)
             {
 
                 switch (Console.ReadKey(true).Key)
+
                 {
 
                     case ConsoleKey.Enter:
@@ -135,8 +137,15 @@ namespace The_seventh_yakuzer
 
             inventory = gameState.Inventory;
             GameData.SetWeaponList();
+            
+            gs._curSMenu = null;
+            gs._cursorPosX = 0;
+            gs._cursorPosY = 0;
+            gs._selectMode = 0;
+
+            List<Character> Ennemy = new List<Character>() { GameData.Nishiki };
               
-            Fight fight = new Fight(Party, Party);
+            Fight fight = new Fight(Ennemy, Party);
 
             gs._cursorPosX = 0;
             gs._cursorPosY = 0;
@@ -157,7 +166,6 @@ namespace The_seventh_yakuzer
 
             while (game)
             {
-
                 while (gMode == GameModes.MAP)
                 {
                     switch (Console.ReadKey(true).Key)
@@ -309,32 +317,34 @@ namespace The_seventh_yakuzer
 
                 while (gMode == GameModes.FIGHT)
                 {
-
-                    switch (Console.ReadKey(true).Key)
+                  
+                    while (fight.Turn == 0)
                     {
+                      
+                        switch (Console.ReadKey(true).Key)
+                        {
+                            case ConsoleKey.Enter:
+                                gs.SelectHover(ConsoleColor.DarkBlue, Party);
+                                gs.SelectOption(fight, gameState);
+                                break;
 
-                        case ConsoleKey.Enter:
-                            gs.SelectHover(ConsoleColor.DarkBlue, Party);
-                            gs.SelectOption(fight, gameState);
-                            break;
+                            case ConsoleKey.Escape:
+                                gs._cursorPosX = gs._prevCurX;
+                                gs._cursorPosY = gs._prevCurY;
+                                gs._selectMode = 0;
+                                gs.SelectHover(ConsoleColor.Blue, Party);
+                                gs.SetFightUI(fight);
+                                break;
 
-                        case ConsoleKey.Escape:
-                            gs._cursorPosX = gs._prevCurX;
-                            gs._cursorPosY = gs._prevCurY;
-                            gs._selectMode = 0;
-                            gs.SelectHover(ConsoleColor.Blue, Party);
-                            gs.SetFightUI(fight);
-                            break;
+                            case ConsoleKey.UpArrow:
+                                dir = "u";
+                                gs.MoveCursor(dir, Party);
+                                break;
 
-                        case ConsoleKey.UpArrow:
-                            dir = "u";
-                            gs.MoveCursor(dir, Party);
-                            break;
-
-                        case ConsoleKey.W:
-                            dir = "u";
-                            gs.MoveCursor(dir, Party);
-                            break;
+                            case ConsoleKey.W:
+                                dir = "u";
+                                gs.MoveCursor(dir, Party);
+                                break;
 
                         case ConsoleKey.DownArrow:
                             dir = "d";
@@ -357,25 +367,25 @@ namespace The_seventh_yakuzer
                             gs.MoveCursor(dir, Party);
                             break;
 
-                        case ConsoleKey.LeftArrow:
-                            dir = "l";
-                            gs.MoveCursor(dir, Party);
-                            break;
+                            case ConsoleKey.LeftArrow:
+                                dir = "l";
+                                gs.MoveCursor(dir, Party);
+                                break;
 
-                        case ConsoleKey.A:
-                            dir = "l";
-                            gs.MoveCursor(dir, Party);
-                            break;
+                            case ConsoleKey.A:
+                                dir = "l";
+                                gs.MoveCursor(dir, Party);
+                                break;
 
-                        case ConsoleKey.RightArrow:
-                            dir = "r";
-                            gs.MoveCursor(dir, Party);
-                            break;
+                            case ConsoleKey.RightArrow:
+                                dir = "r";
+                                gs.MoveCursor(dir, Party);
+                                break;
 
-                        case ConsoleKey.D:
-                            dir = "r";
-                            gs.MoveCursor(dir, Party);
-                            break;
+                            case ConsoleKey.D:
+                                dir = "r";
+                                gs.MoveCursor(dir, Party);
+                                break;
 
                         case ConsoleKey.D7:
                             gMode = GameModes.FIGHT;
@@ -383,42 +393,33 @@ namespace The_seventh_yakuzer
                             gs.SetFightUI(fight);
                             break;
 
-                        case ConsoleKey.D8:
-                            //gMode = GameModes.DIALOG;
-                            break;
+                                fight.Party[0].SetHP(fight.Ennemy[0].EquippedStyle.AttackList[0].DmgMax, fight);
+                                fight.Ennemy[0].SetMP(fight.Ennemy[0].EquippedStyle.AttackList[0].PMCost, fight);
+                                gs.DisplayTurnInfo(fight, " used " + fight.Ennemy[0].EquippedStyle.AttackList[0].Name + " and dealt " + (fight.Ennemy[0].EquippedStyle.StatDict["Attack"] + fight.Ennemy[0].EquippedStyle.AttackList[0].DmgMax) + " Damages to " + fight.Party[0].Name);
+                            }
 
-                        case ConsoleKey.D9:
-                            gMode = GameModes.MAP;
-                            Console.Clear();
-                            gs.SetMenuTab();
-                            gs.SetSpritesTab(Party);
-                            gs.SetMapTab(currentMapX, currentMapY);
-                            gs.InitKiryu(GameScreen._kiryuPosX - 1, GameScreen._kiryuPosY);
-                            break;
+
                     }
 
-
-                }
-
-                while (gMode == GameModes.DIALOG)
-                {
-
-                }
-
-                while (gMode == GameModes.MENU)
-                {
-                    switch (Console.ReadKey(true).Key)
+                    while (gMode == GameModes.DIALOG)
                     {
+
+                    }
+
+                    while (gMode == GameModes.MENU)
+                    {
+                        switch (Console.ReadKey(true).Key)
+                        {
 
                         case ConsoleKey.Enter:
                             gs.SelectHover(ConsoleColor.DarkBlue, Party);
                             gs.SelectOption(fight, gameState);
                             break;
 
-                        case ConsoleKey.Escape:
-                            gs._cursorPosX = gs._prevCurX;
-                            gs._cursorPosY = gs._prevCurY;
-                            gs._selectMode = 0;
+                            case ConsoleKey.Escape:
+                                gs._cursorPosX = gs._prevCurX;
+                                gs._cursorPosY = gs._prevCurY;
+                                gs._selectMode = 0;
 
                             if (gs._curSMenu == "MParty" || gs._curSMenu == "MItems" || gs._curSMenu == "SLQ" || gs._curSMenu == "SLQSave" || gs._curSMenu == "SLQLoad")
                             {
@@ -428,42 +429,42 @@ namespace The_seventh_yakuzer
                                 gs.InitKiryu(GameScreen._kiryuPosX - 1, GameScreen._kiryuPosY);
                             }
 
-                            break;
+                                break;
 
-                        case ConsoleKey.UpArrow:
-                            dir = "u";
-                            gs.MoveCursor(dir, Party);
-                            break;
+                            case ConsoleKey.UpArrow:
+                                dir = "u";
+                                gs.MoveCursor(dir, Party);
+                                break;
 
-                        case ConsoleKey.W:
-                            dir = "u";
-                            gs.MoveCursor(dir, Party);
-                            break;
+                            case ConsoleKey.W:
+                                dir = "u";
+                                gs.MoveCursor(dir, Party);
+                                break;
 
-                        case ConsoleKey.DownArrow:
-                            dir = "d";
-                            gs.MoveCursor(dir, Party);
-                            break;
+                            case ConsoleKey.DownArrow:
+                                dir = "d";
+                                gs.MoveCursor(dir, Party);
+                                break;
 
-                        case ConsoleKey.S:
-                            dir = "d";
-                            gs.MoveCursor(dir, Party);
-                            break;
+                            case ConsoleKey.S:
+                                dir = "d";
+                                gs.MoveCursor(dir, Party);
+                                break;
 
-                        case ConsoleKey.LeftArrow:
-                            dir = "l";
-                            gs.MoveCursor(dir, Party);
-                            break;
+                            case ConsoleKey.LeftArrow:
+                                dir = "l";
+                                gs.MoveCursor(dir, Party);
+                                break;
 
-                        case ConsoleKey.A:
-                            dir = "l";
-                            gs.MoveCursor(dir, Party);
-                            break;
+                            case ConsoleKey.A:
+                                dir = "l";
+                                gs.MoveCursor(dir, Party);
+                                break;
 
-                        case ConsoleKey.RightArrow:
-                            dir = "r";
-                            gs.MoveCursor(dir, Party);
-                            break;
+                            case ConsoleKey.RightArrow:
+                                dir = "r";
+                                gs.MoveCursor(dir, Party);
+                                break;
 
                         case ConsoleKey.D:
                             dir = "r";
@@ -476,6 +477,7 @@ namespace The_seventh_yakuzer
 
         static public void changeMode(GameModes Mode, Fight fight)
         {
+
             if (Mode == GameModes.FIGHT)
             {
                 gMode = GameModes.FIGHT;

@@ -15,11 +15,11 @@ namespace The_seventh_yakuzer
         public string Sprite { get; private set; }
         [JsonIgnore]
         public List<GameData.Type>? Type { get; private set; }
-        public int Experience { get; private set; }
-        public int Level { get; private set; }
+        public int Experience { get; set; }
+        public int Level { get; set; }
         public int PV { get; set; }
         public int PM { get; set; }
-        public List<GameData.Status> Status { get; private set; }
+        public List<GameData.Status> Status { get; set; }
         [JsonIgnore]
         public Dictionary<string, int>? StatDict { get; private set; }
         [JsonIgnore]
@@ -69,7 +69,8 @@ namespace The_seventh_yakuzer
             EquippedArmor = new List<Armor>();
             EquippedGears = new List<Gear>();
         }
-
+        public event Action OnChangeHP;
+        public event Action OnKO;
         public Character(string name, string sprite, List<Character> styleList)
         {
             Name = name;
@@ -92,6 +93,42 @@ namespace The_seventh_yakuzer
             foreach (var stat in EquippedStyle.StatDict)
             {
                 StatDict[stat.Key] += 1;
+            }
+        }
+
+        public void SetHP(int hpModifier, Fight fight)
+        {
+            if (PV - hpModifier <= 0)
+            {
+                PV = 0;
+                Status = new List<GameData.Status>() { GameData.Status.KO };
+                OnKO?.Invoke();
+            }
+            else if (PV - hpModifier > EquippedStyle.StatDict["PV"])
+            {
+                PV = EquippedStyle.StatDict["PV"];
+            } 
+            else
+            {
+                PV -= hpModifier;
+                Program.gs.SetFightUI(fight);
+                OnChangeHP?.Invoke();
+            }
+        }
+        public void SetMP(int mpModifier, Fight fight) 
+        {
+            if (PM - mpModifier <= 0)
+            {
+                PM = 0;
+            }
+            else if (PM - mpModifier >= EquippedStyle.StatDict["PM"])
+            {
+                PM = EquippedStyle.StatDict["PM"];
+            }
+            else
+            {
+                PM -= mpModifier;
+                Program.gs.SetFightUI(fight);
             }
         }
     }

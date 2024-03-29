@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace The_seventh_yakuzer
@@ -10,21 +11,31 @@ namespace The_seventh_yakuzer
     internal class Character
     {
         public string Name { get; private set; }
+        [JsonIgnore]
         public string Sprite { get; private set; }
+        [JsonIgnore]
         public List<GameData.Type>? Type { get; private set; }
         public int Experience { get; set; }
         public int Level { get; set; }
         public int PV { get; set; }
         public int PM { get; set; }
         public List<GameData.Status> Status { get; set; }
+        [JsonIgnore]
         public Dictionary<string, int>? StatDict { get; private set; }
+        [JsonIgnore]
         public List<Attack>? AttackList { get; private set; }
-        public Weapon EquippedWeapon { get; set; }
+        [JsonIgnore]
+        public Weapon EquippedWeapon { get; private set; }
+        [JsonIgnore]
         public List<WeaponType>? PossibleWeapon {  get; private set; }
+        [JsonIgnore]
         public List<Character>? StyleList { get; private set; }
-        public Character EquippedStyle { get; set; }
-        public List<Armor> EquippedArmor { get; set; }
-        public List<Gear> EquippedGears { get; set; }
+        [JsonIgnore]
+        public Character EquippedStyle { get; private set; }
+        [JsonIgnore]
+        public List<Armor> EquippedArmor { get; private set; }
+        [JsonIgnore]
+        public List<Gear> EquippedGears { get; private set; }
         public Character(string name, string sprite, List<GameData.Type> type, int pv, int pm, int attack, int defense, int magic, int willpower, int agility, List<Attack> attackList, List<WeaponType>? possibleWeapon, Weapon? defaultWeapon)
         {
             Name = name;

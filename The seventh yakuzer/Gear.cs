@@ -10,8 +10,8 @@ namespace The_seventh_yakuzer
     {
         public int Rarity { get; private set; }
         public Dictionary<string, int> StatDict { get; private set; }
-        public Gear(string name, string sprite, int rarity, List<string> effectList, int PV, int PM, int attack, int defense, int magic, int willpower, int agility)
-            : base(name, sprite, effectList)
+        public Gear(string name, string sprite, int rarity, List<string> effectList, int PV, int PM, int attack, int defense, int magic, int willpower, int agility, int power)
+            : base(name, sprite, effectList, power)
         {
             Rarity = rarity;
             StatDict = GameData.StatDictDefault;

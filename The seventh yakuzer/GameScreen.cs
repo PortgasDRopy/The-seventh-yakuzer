@@ -562,7 +562,6 @@ namespace The_seventh_yakuzer
 
         public void SetSubmenu(string sMenu, List<Character> Party, Dictionary<string, List<Item>> Inventory)
         {
-
             if (sMenu == "skills" || sMenu == "items" || sMenu == "party")
             {
                 int curX = 36;

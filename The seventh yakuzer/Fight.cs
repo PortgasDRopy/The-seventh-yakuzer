@@ -66,11 +66,6 @@ namespace The_seventh_yakuzer
             return false;
         }
 
-        private void Kashiwagi_OnKO()
-        {
-            throw new NotImplementedException();
-        }
-
         public void Run()
         {
             if (Randomizer.Next(100) <= Party[0].EquippedStyle.StatDict["Agility"])
@@ -84,8 +79,8 @@ namespace The_seventh_yakuzer
             else
             {
                 DisplayTurnInfo(" tried to run away but failed ");
+                Turn = (Turn + 1) % 2;
             }
-            Turn = (Turn + 1) % 2;
         }
 
         public void BasicAttack(Character attacker, Character attacked)
@@ -95,12 +90,13 @@ namespace The_seventh_yakuzer
                 DisplayTurnInfo(" attacked " + attacked.Name + " and dealt " + (attacker.EquippedStyle.StatDict["Attack"] + attacker.EquippedStyle.AttackList[0].DmgMax - attacked.EquippedStyle.StatDict["Defense"]) + " damages.");
                 attacker.SetMP(attacker.EquippedStyle.AttackList[0].PMCost, this);
                 attacked.SetHP(attacker.EquippedStyle.StatDict["Attack"] + attacker.EquippedStyle.AttackList[0].DmgMax - attacked.EquippedStyle.StatDict["Defense"], this);
+                Turn = (Turn + 1) % 2;
             }
             else
             {
                 DisplayTurnInfo(" missed his attack :( ");
+                Turn = (Turn + 1) % 2;
             }
-            Turn = (Turn + 1) % 2;
         }
 
         public void Attack(Attack attack)
@@ -110,19 +106,21 @@ namespace The_seventh_yakuzer
                 DisplayTurnInfo(" used " + attack.Name + " on " + Ennemy[0].Name + " and dealt " + (Party[0].EquippedStyle.StatDict["Magic"] + Party[0].EquippedStyle.AttackList[0].DmgMax - Ennemy[0].EquippedStyle.StatDict["Willpower"]) + " damages.");
                 Party[0].SetMP(Party[0].EquippedStyle.AttackList[0].PMCost, this);
                 Ennemy[0].SetHP(Party[0].EquippedStyle.StatDict["Magic"] + Party[0].EquippedStyle.AttackList[0].DmgMax - Ennemy[0].EquippedStyle.StatDict["Willpower"], this);
+                Turn = (Turn + 1) % 2;
             }
             else
             {
                 Party[0].SetMP(Party[0].EquippedStyle.AttackList[0].PMCost, this);
                 DisplayTurnInfo(" missed his attack :( ");
+                Turn = (Turn + 1) % 2;
             }
-            Turn = (Turn + 1) % 2;
         }
 
         public void Change(Character character)
         {
             Party.Remove(character);
             Party.Insert(0, character);
+            Turn = (Turn + 1) % 2;
         }
 
         public void UseItem(Item item, Character user)

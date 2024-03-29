@@ -49,7 +49,7 @@ namespace The_seventh_yakuzer
         public static List<Attack> NishikiAttacks { get; } = new List<Attack>() { BasicBluntElec, BasicMagic };
         public static List<Attack> KuzeAttacks { get; } = new List<Attack>() { BasicIce, BasicElec, BasicGun, BasicGunFire, BasicGunIce, BasicGunElec, BasicBlade, BasicBladeFire, BasicBladeIce, BasicBladeElec };
         public static List<Attack> KuzePipeAttacks { get; } = new List<Attack>();
-        public static List<Attack> KashiwagiAttacks { get; } = new List<Attack>();
+        public static List<Attack> KashiwagiAttacks { get; } = new List<Attack>() { BasicMagic };
         public static List<Attack> YonedaAttacks { get; } = new List<Attack>();
         public static List<Attack> YonedaTantoAttacks { get; } = new List<Attack>();
         public static List<Attack> TachibanaAttacks { get; } = new List<Attack>();

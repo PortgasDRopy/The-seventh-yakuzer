@@ -46,15 +46,15 @@ namespace The_seventh_yakuzer
         public bool IsEnnemy(GameScreen gs)
         {
 
-            if (Randomizer.Next(101) <= gs.grid[GameScreen._kiryuPosX, GameScreen._kiryuPosY].danger)
+            if (Randomizer.Next(200) <= gs.grid[GameScreen._kiryuPosX, GameScreen._kiryuPosY].danger)
             {
                 Ennemy = new List<Character>() { GameData.Kashiwagi };
                 GameData.Kashiwagi.OnKO += this.ChangeCharacter;
-                if (Ennemy[0].EquippedStyle.StatDict["Agility"] > Party[0].EquippedStyle.StatDict["Agility"])
+                if (Ennemy[0].EquippedStyle.StatDict["Agility"] > Program.Party[0].EquippedStyle.StatDict["Agility"])
                 {
                     Turn = 1;
                 }
-                else if (Ennemy[0].EquippedStyle.StatDict["Agility"] < Party[0].EquippedStyle.StatDict["Agility"])
+                else if (Ennemy[0].EquippedStyle.StatDict["Agility"] < Program.Party[0].EquippedStyle.StatDict["Agility"])
                 {
                     Turn = 0;
                 }
@@ -67,7 +67,7 @@ namespace The_seventh_yakuzer
             return false;
         }
 
-        public void Run()
+        public bool Run()
         {
             if (Randomizer.Next(100) <= Party[0].EquippedStyle.StatDict["Agility"])
             {
@@ -76,11 +76,13 @@ namespace The_seventh_yakuzer
                 GameData.Kashiwagi.PV = GameData.Kashiwagi.EquippedStyle.StatDict["PV"];
                 GameData.Kashiwagi.Status = new List<GameData.Status>() { GameData.Status.GOOD };
                 Program.changeMode(Program.GameModes.MAP);
+                return true;
             }
             else
             {
                 DisplayTurnInfo(" tried to run away but failed ");
                 Turn = (Turn + 1) % 2;
+                return false;
             }
         }
 

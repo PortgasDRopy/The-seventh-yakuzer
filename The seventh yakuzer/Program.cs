@@ -120,7 +120,7 @@ namespace The_seventh_yakuzer
 
                         break;
                     }
-                    
+
                     if (gs._initSave > 4)
                     {
                         gameState.Load(gs._initSave - 4);
@@ -128,8 +128,6 @@ namespace The_seventh_yakuzer
                         break;
                     }
                 }
-                mainMenu = false;
-
             }
 
             Party.Add(GameData.Kiryu);
@@ -138,14 +136,14 @@ namespace The_seventh_yakuzer
 
             inventory = gameState.Inventory;
             GameData.SetWeaponList();
-            
+
             gs._curSMenu = null;
             gs._cursorPosX = 0;
             gs._cursorPosY = 0;
             gs._selectMode = 0;
 
             List<Character> Ennemy = new List<Character>() { GameData.Nishiki };
-              
+
             Fight fight = new Fight(gameState);
 
             gs._cursorPosX = 0;
@@ -318,10 +316,10 @@ namespace The_seventh_yakuzer
 
                 while (gMode == GameModes.FIGHT)
                 {
-                  
+
                     while (fight.Turn == 0)
                     {
-                      
+
                         switch (Console.ReadKey(true).Key)
                         {
                             case ConsoleKey.Enter:
@@ -347,111 +345,21 @@ namespace The_seventh_yakuzer
                                 gs.MoveCursor(dir, Party);
                                 break;
 
-                        case ConsoleKey.DownArrow:
-                            dir = "d";
-                            if (gs._selectMode == 2 && gs._curSMenu != "MItems" && gs._curSMenu != "Items")
-                            {
-                                if (Party[0].EquippedStyle.AttackList.Count > (gs._cursorPosX + (gs._cursorPosY + 1) * 2))
+                            case ConsoleKey.DownArrow:
+                                dir = "d";
+                                if (gs._selectMode == 2 && gs._curSMenu != "MItems" && gs._curSMenu != "Items")
+                                {
+                                    if (Party[0].EquippedStyle.AttackList.Count > (gs._cursorPosX + (gs._cursorPosY + 1) * 2))
+                                    {
+                                        gs.MoveCursor(dir, Party);
+                                    }
+                                }
+                                if (gs._selectMode != 2)
                                 {
                                     gs.MoveCursor(dir, Party);
                                 }
-                            }
-                            if (gs._selectMode != 2)
-                            {
-                                gs.MoveCursor(dir, Party);
-                            }
-                            break;
-
-
-                        case ConsoleKey.S:
-                            dir = "d";
-                            gs.MoveCursor(dir, Party);
-                            break;
-
-                            case ConsoleKey.LeftArrow:
-                                dir = "l";
-                                gs.MoveCursor(dir, Party);
                                 break;
 
-                            case ConsoleKey.A:
-                                dir = "l";
-                                gs.MoveCursor(dir, Party);
-                                break;
-
-                            case ConsoleKey.RightArrow:
-                                dir = "r";
-                                gs.MoveCursor(dir, Party);
-                                break;
-
-                            case ConsoleKey.D:
-                                dir = "r";
-                                gs.MoveCursor(dir, Party);
-                                break;
-
-                                fight.Party[0].SetHP(fight.Ennemy[0].EquippedStyle.AttackList[0].DmgMax, fight);
-                                fight.Ennemy[0].SetMP(fight.Ennemy[0].EquippedStyle.AttackList[0].PMCost, fight);
-                                gs.DisplayTurnInfo(fight, " used " + fight.Ennemy[0].EquippedStyle.AttackList[0].Name + " and dealt " + (fight.Ennemy[0].EquippedStyle.StatDict["Attack"] + fight.Ennemy[0].EquippedStyle.AttackList[0].DmgMax) + " Damages to " + fight.Party[0].Name);
-                            }
-                            case ConsoleKey.D7:
-                                gMode = GameModes.FIGHT;
-                                Console.Clear();
-                                gs.SetFightUI(fight);
-                                break;
-                            }
-                        }
-                    if (fight.Turn == 1 && gMode == GameModes.FIGHT)
-                    {
-                        fight.BasicAttack(fight.Ennemy[0], fight.Party[0]);
-                    }
-
-
-                    }
-
-                    while (gMode == GameModes.DIALOG)
-                    {
-
-                    }
-
-                    while (gMode == GameModes.MENU)
-                    {
-                        switch (Console.ReadKey(true).Key)
-                        {
-
-
-                        case ConsoleKey.Enter:
-                            gs.SelectHover(ConsoleColor.DarkBlue, Party);
-                            gs.SelectOption(fight, gameState);
-                            break;
-
-                            case ConsoleKey.Escape:
-                                gs._cursorPosX = gs._prevCurX;
-                                gs._cursorPosY = gs._prevCurY;
-                                gs._selectMode = 0;
-
-                            if (gs._curSMenu == "MParty" || gs._curSMenu == "MItems" || gs._curSMenu == "SLQ" || gs._curSMenu == "SLQSave" || gs._curSMenu == "SLQLoad")
-                            {
-                                gMode = GameModes.MAP;
-                                gs._curSMenu = null;
-                                gs.SetMapTab(currentMapX, currentMapY);
-                                gs.InitKiryu(GameScreen._kiryuPosX - 1, GameScreen._kiryuPosY);
-                            }
-
-                                break;
-
-                            case ConsoleKey.UpArrow:
-                                dir = "u";
-                                gs.MoveCursor(dir, Party);
-                                break;
-
-                            case ConsoleKey.W:
-                                dir = "u";
-                                gs.MoveCursor(dir, Party);
-                                break;
-
-                            case ConsoleKey.DownArrow:
-                                dir = "d";
-                                gs.MoveCursor(dir, Party);
-                                break;
 
                             case ConsoleKey.S:
                                 dir = "d";
@@ -473,6 +381,97 @@ namespace The_seventh_yakuzer
                                 gs.MoveCursor(dir, Party);
                                 break;
 
+                            case ConsoleKey.D:
+                                dir = "r";
+                                gs.MoveCursor(dir, Party);
+                                break;
+
+                            case ConsoleKey.D7:
+                                gMode = GameModes.FIGHT;
+                                Console.Clear();
+                                gs.SetFightUI(fight);
+                                break;
+                        }
+                    }
+                    if (fight.Turn == 1 && gMode == GameModes.FIGHT)
+                    {
+                        fight.BasicAttack(fight.Ennemy[0], fight.Party[0]);
+                    }
+
+                    //fight.Party[0].SetHP(fight.Ennemy[0].EquippedStyle.AttackList[0].DmgMax, fight);
+                    //fight.Ennemy[0].SetMP(fight.Ennemy[0].EquippedStyle.AttackList[0].PMCost, fight);
+                    //gs.DisplayTurnInfo(fight, " used " + fight.Ennemy[0].EquippedStyle.AttackList[0].Name + " and dealt " + 
+                        //(fight.Ennemy[0].EquippedStyle.StatDict["Attack"] + fight.Ennemy[0].EquippedStyle.AttackList[0].DmgMax) + 
+                        //" Damages to " + fight.Party[0].Name);
+
+                }
+
+                while (gMode == GameModes.DIALOG)
+                {
+
+                }
+
+                while (gMode == GameModes.MENU)
+                {
+                    switch (Console.ReadKey(true).Key)
+                    {
+
+
+                        case ConsoleKey.Enter:
+                            gs.SelectHover(ConsoleColor.DarkBlue, Party);
+                            gs.SelectOption(fight, gameState);
+                            break;
+
+                        case ConsoleKey.Escape:
+                            gs._cursorPosX = gs._prevCurX;
+                            gs._cursorPosY = gs._prevCurY;
+                            gs._selectMode = 0;
+
+                            if (gs._curSMenu == "MParty" || gs._curSMenu == "MItems" || gs._curSMenu == "SLQ" || gs._curSMenu == "SLQSave" || gs._curSMenu == "SLQLoad")
+                            {
+                                gMode = GameModes.MAP;
+                                gs._curSMenu = null;
+                                gs.SetMapTab(currentMapX, currentMapY);
+                                gs.InitKiryu(GameScreen._kiryuPosX - 1, GameScreen._kiryuPosY);
+                            }
+
+                            break;
+
+                        case ConsoleKey.UpArrow:
+                            dir = "u";
+                            gs.MoveCursor(dir, Party);
+                            break;
+
+                        case ConsoleKey.W:
+                            dir = "u";
+                            gs.MoveCursor(dir, Party);
+                            break;
+
+                        case ConsoleKey.DownArrow:
+                            dir = "d";
+                            gs.MoveCursor(dir, Party);
+                            break;
+
+                        case ConsoleKey.S:
+                            dir = "d";
+                            gs.MoveCursor(dir, Party);
+                            break;
+
+                        case ConsoleKey.LeftArrow:
+                            dir = "l";
+                            gs.MoveCursor(dir, Party);
+                            break;
+
+                        case ConsoleKey.A:
+                            dir = "l";
+                            gs.MoveCursor(dir, Party);
+                            break;
+
+                        case ConsoleKey.RightArrow:
+                            dir = "r";
+                            gs.MoveCursor(dir, Party);
+                            break;
+
                         case ConsoleKey.D:
                             dir = "r";
                             gs.MoveCursor(dir, Party);
@@ -480,8 +479,9 @@ namespace The_seventh_yakuzer
                     }
                 }
             }
+        }
 
-        static public void changeMode(GameModes Mode)
+        static public void changeMode(GameModes Mode, Fight fight)
         {
 
             if (Mode == GameModes.FIGHT)

@@ -41,7 +41,11 @@ namespace The_seventh_yakuzer
             Name = name;
             Sprite = sprite;
             Type = type;
-            StatDict = GameData.StatDictDefault;
+            StatDict = new Dictionary<string, int>();
+            foreach (string key in GameData.StatDictDefault.Keys)
+            {
+                StatDict[key] = GameData.StatDictDefault[key];
+            }
             StatDict["PV"] = pv;
             StatDict["PM"] = pm;
             StatDict["Attack"] = attack;
@@ -102,16 +106,18 @@ namespace The_seventh_yakuzer
             {
                 PV = 0;
                 Status = new List<GameData.Status>() { GameData.Status.KO };
+                Program.gs.UpdateFightUI(fight);
                 OnKO?.Invoke();
             }
             else if (PV - hpModifier > EquippedStyle.StatDict["PV"])
             {
                 PV = EquippedStyle.StatDict["PV"];
+                Program.gs.UpdateFightUI(fight);
             } 
             else
             {
                 PV -= hpModifier;
-                Program.gs.SetFightUI(fight);
+                Program.gs.UpdateFightUI(fight);
                 OnChangeHP?.Invoke();
             }
         }
@@ -120,15 +126,17 @@ namespace The_seventh_yakuzer
             if (PM - mpModifier <= 0)
             {
                 PM = 0;
+                Program.gs.UpdateFightUI(fight);
             }
             else if (PM - mpModifier >= EquippedStyle.StatDict["PM"])
             {
                 PM = EquippedStyle.StatDict["PM"];
+                Program.gs.UpdateFightUI(fight);
             }
             else
             {
                 PM -= mpModifier;
-                Program.gs.SetFightUI(fight);
+                Program.gs.UpdateFightUI(fight);
             }
         }
     }

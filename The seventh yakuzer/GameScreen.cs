@@ -640,9 +640,11 @@ namespace The_seventh_yakuzer
             }
 
             sr2.Close();
+            UpdateFightUI(fight);
+        }
 
 
-
+        public void UpdateFightUI(Fight fight) { 
             //Set the first party member's infos on the UI
 
             string curPlName = fight.Party[0].EquippedStyle.Name;
@@ -655,6 +657,8 @@ namespace The_seventh_yakuzer
 
             //Draw said infos
             int y = 46;
+            Console.SetCursorPosition(9, y);
+            Console.Write("                                                                                                                              ");
             Console.SetCursorPosition(9, y);
 
             Console.ForegroundColor = ConsoleColor.White;
@@ -693,11 +697,59 @@ namespace The_seventh_yakuzer
             Console.ForegroundColor = ConsoleColor.Gray;
 
             SelectHover(ConsoleColor.Blue, fight.Party);
+
+            curPlName = fight.Ennemy[0].EquippedStyle.Name;
+            curPlHP = fight.Ennemy[0].PV;
+            curPlHPM = fight.Ennemy[0].EquippedStyle.StatDict["PV"];
+            curPlMP = fight.Ennemy[0].PM;
+            curPlMPM = fight.Ennemy[0].EquippedStyle.StatDict["PM"];
+            curPlStt = fight.Ennemy[0].EquippedStyle.Status[0].ToString();
+
+
+            //Draw said infos
+            y = 37;
+            Console.SetCursorPosition(9, y);
+            Console.Write("                                                                                                                              ");
+            Console.SetCursorPosition(9, y);
+
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write(curPlName);
+            Console.ForegroundColor = ConsoleColor.Gray;
+
+            Console.SetCursorPosition(Console.CursorLeft + 8, y);
+            Console.Write('|');
+
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.SetCursorPosition(Console.CursorLeft + 8, y);
+            Console.Write(curPlHP);
+            Console.Write('/');
+            Console.Write(curPlHPM);
+            Console.Write(" HP");
+            Console.ForegroundColor = ConsoleColor.Gray;
+
+            Console.SetCursorPosition(Console.CursorLeft + 8, y);
+            Console.Write('|');
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.SetCursorPosition(Console.CursorLeft + 8, y);
+            Console.Write(curPlMP);
+            Console.Write('/');
+            Console.Write(curPlMPM);
+            Console.Write(" MP");
+            Console.ForegroundColor = ConsoleColor.Gray;
+
+            Console.SetCursorPosition(Console.CursorLeft + 8, y);
+            Console.Write('|');
+
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.SetCursorPosition(Console.CursorLeft + 8, y);
+            Console.Write("Status : ");
+            Console.Write(curPlStt);
+            Console.ForegroundColor = ConsoleColor.Gray;
         }
 
         public void SetSubmenu(string sMenu, List<Character> Party, List<Item> Inventory)
         {
-
             if (sMenu == "skills" || sMenu == "items" || sMenu == "party")
             {
                 int curX = 36;
@@ -1536,7 +1588,7 @@ namespace The_seventh_yakuzer
                     }
 
                     Console.SetCursorPosition(146, 25);
-                    Console.Write("Money : " + tempGameState.Money + "¥");
+                    Console.Write("Money : " + tempGameState.Money + "ï¿½");
 
                     Console.SetCursorPosition(146, 27);
                     Console.Write("Last Saved : " + tempGameState.Time.Date);
@@ -2128,7 +2180,7 @@ namespace The_seventh_yakuzer
                     }
 
                     Console.SetCursorPosition(105, 28);
-                    Console.Write("Money : " + tempGameState.Money + "¥");
+                    Console.Write("Money : " + tempGameState.Money + "ï¿½");
 
                     Console.SetCursorPosition(105, 29);
                     Console.Write("Last Saved : " + tempGameState.Time.Date);
@@ -2170,15 +2222,9 @@ namespace The_seventh_yakuzer
             {
                 if (_curSMenu == "skills") 
                 {
-                    if (fight.Attack(fight.Party[0].AttackList[_cursorPosX + (2 * _cursorPosY)]))
-                    {
-                        fight.Ennemy[0].SetHP(fight.Party[0].EquippedStyle.AttackList[_cursorPosX + (2 * _cursorPosY)].DmgMax, fight);
-                        fight.Party[0].PM -= fight.Party[0].EquippedStyle.AttackList[_cursorPosX + (2 * _cursorPosY)].PMCost;
-                        DisplayTurnInfo(fight, " used " + fight.Party[0].EquippedStyle.AttackList[_cursorPosX + (2 * _cursorPosY)].Name + " and dealt " + (fight.Party[0].EquippedStyle.StatDict["Attack"] + fight.Party[0].EquippedStyle.AttackList[_cursorPosX + (2 * _cursorPosY)].DmgMax) + " Damages to " + fight.Ennemy[0].Name);
-                    }
+                    fight.Attack(fight.Party[0].EquippedStyle.AttackList[_cursorPosX + (2 * _cursorPosY)]);
                 }
             }
-            
             //Main Fight Menu
             if (_selectMode == 0)
             {
@@ -2213,12 +2259,7 @@ namespace The_seventh_yakuzer
                 //Attack
                 if (_cursorPosX == 0)
                 {
-                    if (fight.BasicAttack(fight.Party[0], fight.Ennemy[0]))
-                    {
-                        fight.Ennemy[0].SetHP(fight.Party[0].EquippedStyle.AttackList[0].DmgMax, fight);
-                        fight.Party[0].PM -= fight.Party[0].EquippedStyle.AttackList[0].PMCost;
-                        DisplayTurnInfo(fight, " used " + fight.Party[0].EquippedStyle.AttackList[0].Name + " and dealt " + (fight.Party[0].EquippedStyle.StatDict["Attack"] + fight.Party[0].EquippedStyle.AttackList[0].DmgMax) + " Damages to " + fight.Ennemy[0].Name);
-                    }
+                    fight.BasicAttack(fight.Party[0], fight.Ennemy[0]);
                 }
 
                 //Party

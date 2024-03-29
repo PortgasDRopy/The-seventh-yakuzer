@@ -23,23 +23,22 @@ namespace The_seventh_yakuzer
         }
 
         static public GameScreen gs = new GameScreen();
-        static GameModes gMode = GameModes.MAP;
         static public GameState gameState = new GameState();
-
+        static GameModes gMode = GameModes.MAP;
         static public List<Character> Party = new();
         static public List<Item> inventory = null;
-
 
         public static int currentMapX;
         public static int currentMapY;
 
         public static int money;
+        static Fight fight;
+
 
         static void Main(string[] args)
         {
             Console.SetWindowPosition(0, 0);
             Console.CursorVisible = false;
-
             bool mainMenu = true;
             bool game = true;
             string dir;
@@ -129,6 +128,8 @@ namespace The_seventh_yakuzer
                         break;
                     }
                 }
+                mainMenu = false;
+
             }
 
             Party.Add(GameData.Kiryu);
@@ -145,7 +146,7 @@ namespace The_seventh_yakuzer
 
             List<Character> Ennemy = new List<Character>() { GameData.Nishiki };
               
-            Fight fight = new Fight(Ennemy, Party);
+            Fight fight = new Fight(gameState);
 
             gs._cursorPosX = 0;
             gs._cursorPosY = 0;
@@ -387,16 +388,21 @@ namespace The_seventh_yakuzer
                                 gs.MoveCursor(dir, Party);
                                 break;
 
-                        case ConsoleKey.D7:
-                            gMode = GameModes.FIGHT;
-                            Console.Clear();
-                            gs.SetFightUI(fight);
-                            break;
-
                                 fight.Party[0].SetHP(fight.Ennemy[0].EquippedStyle.AttackList[0].DmgMax, fight);
                                 fight.Ennemy[0].SetMP(fight.Ennemy[0].EquippedStyle.AttackList[0].PMCost, fight);
                                 gs.DisplayTurnInfo(fight, " used " + fight.Ennemy[0].EquippedStyle.AttackList[0].Name + " and dealt " + (fight.Ennemy[0].EquippedStyle.StatDict["Attack"] + fight.Ennemy[0].EquippedStyle.AttackList[0].DmgMax) + " Damages to " + fight.Party[0].Name);
                             }
+                            case ConsoleKey.D7:
+                                gMode = GameModes.FIGHT;
+                                Console.Clear();
+                                gs.SetFightUI(fight);
+                                break;
+                            }
+                        }
+                    if (fight.Turn == 1 && gMode == GameModes.FIGHT)
+                    {
+                        fight.BasicAttack(fight.Ennemy[0], fight.Party[0]);
+                    }
 
 
                     }
@@ -410,6 +416,7 @@ namespace The_seventh_yakuzer
                     {
                         switch (Console.ReadKey(true).Key)
                         {
+
 
                         case ConsoleKey.Enter:
                             gs.SelectHover(ConsoleColor.DarkBlue, Party);
@@ -473,9 +480,8 @@ namespace The_seventh_yakuzer
                     }
                 }
             }
-        }
 
-        static public void changeMode(GameModes Mode, Fight fight)
+        static public void changeMode(GameModes Mode)
         {
 
             if (Mode == GameModes.FIGHT)

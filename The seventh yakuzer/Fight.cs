@@ -13,16 +13,28 @@ namespace The_seventh_yakuzer
         public Random Randomizer {get; private set;}
         public int Turn { get; private set;}
         public List<Character> Party { get; private set;}
-        public Fight(List<Character> ennemy, List<Character> party)
+        public Fight(GameState gamestate)
+        {
+            Randomizer = new Random();
+            Party = new List<Character>();
+            foreach (Character character in gamestate.Party) 
+            {
+                if (character.PV > 0)
+                {
+                    Party.Add(character);
+                    character.OnKO += this.ChangeCharacter;
+                }
+            }
+        }
+
+        public void Init(List<Character> ennemy)
         {
             Ennemy = ennemy;
-            Randomizer = new Random();
-            Party = party;
-            if (ennemy[0].EquippedStyle.StatDict["Agility"] > party[0].EquippedStyle.StatDict["Agility"])
+            if (Ennemy[0].EquippedStyle.StatDict["Agility"] > Party[0].EquippedStyle.StatDict["Agility"])
             {
                 Turn = 1;
             }
-            else if (ennemy[0].EquippedStyle.StatDict["Agility"] < party[0].EquippedStyle.StatDict["Agility"])
+            else if (Ennemy[0].EquippedStyle.StatDict["Agility"] < Party[0].EquippedStyle.StatDict["Agility"])
             {
                 Turn = 0;
             }
@@ -30,51 +42,86 @@ namespace The_seventh_yakuzer
             {
                 Turn = Randomizer.Next(2);
             }
-            foreach (Character chara in Party) 
-            {
-                chara.OnKO += this.ChangeCharacter;
-            }
         }
         public bool IsEnnemy(GameScreen gs)
         {
+
             if (Randomizer.Next(101) <= gs.grid[GameScreen._kiryuPosX, GameScreen._kiryuPosY].danger)
             {
-                Turn = (Turn + 1) % 2;
+                Ennemy = new List<Character>() { GameData.Kashiwagi };
+                GameData.Kashiwagi.OnKO += this.ChangeCharacter;
+                if (Ennemy[0].EquippedStyle.StatDict["Agility"] > Party[0].EquippedStyle.StatDict["Agility"])
+                {
+                    Turn = 1;
+                }
+                else if (Ennemy[0].EquippedStyle.StatDict["Agility"] < Party[0].EquippedStyle.StatDict["Agility"])
+                {
+                    Turn = 0;
+                }
+                else
+                {
+                    Turn = Randomizer.Next(2);
+                }
                 return true;
             }
             return false;
         }
 
-        public bool Run()
+        public void Run()
         {
-            if (Randomizer.Next(101) <= Party[0].EquippedStyle.StatDict["Agility"])
+            if (Randomizer.Next(100) <= Party[0].EquippedStyle.StatDict["Agility"])
             {
-                return true;
+                DisplayTurnInfo(" ran away ");
+                System.Threading.Thread.Sleep(2000);
+                GameData.Kashiwagi.PV = GameData.Kashiwagi.EquippedStyle.StatDict["PV"];
+                GameData.Kashiwagi.Status = new List<GameData.Status>() { GameData.Status.GOOD };
+                Program.changeMode(Program.GameModes.MAP);
             }
-            Turn = (Turn + 1) % 2;
-            return false;
+            else
+            {
+                DisplayTurnInfo(" tried to run away but failed ");
+                Turn = (Turn + 1) % 2;
+            }
         }
 
-        public bool BasicAttack(Character attacker, Character attacked)
+        public void BasicAttack(Character attacker, Character attacked)
         {
-            if (Randomizer.Next(101) <= attacker.EquippedStyle.AttackList[0].Precision - attacked.EquippedStyle.StatDict["Agility"] + attacker.EquippedStyle.StatDict["Agility"])
+            if (Randomizer.Next(100) <= attacker.EquippedStyle.AttackList[0].Precision - attacked.EquippedStyle.StatDict["Agility"] + attacker.EquippedStyle.StatDict["Agility"])
             {
+                DisplayTurnInfo(" attacked " + attacked.Name + " and dealt " + (attacker.EquippedStyle.StatDict["Attack"] + attacker.EquippedStyle.AttackList[0].DmgMax - attacked.EquippedStyle.StatDict["Defense"]) + " damages.");
+                attacker.SetMP(attacker.EquippedStyle.AttackList[0].PMCost, this);
+                attacked.SetHP(attacker.EquippedStyle.StatDict["Attack"] + attacker.EquippedStyle.AttackList[0].DmgMax - attacked.EquippedStyle.StatDict["Defense"], this);
                 Turn = (Turn + 1) % 2;
-                return true;
             }
-            Turn = (Turn + 1) % 2;
-            return false;
+            else
+            {
+                DisplayTurnInfo(" missed his attack :( ");
+                Turn = (Turn + 1) % 2;
+            }
         }
 
-        public bool Attack(Attack attack)
+        public void Attack(Attack attack)
         {
-            if (Randomizer.Next(101) <= attack.Precision - Ennemy[0].EquippedStyle.StatDict["Agility"] + Party[0].EquippedStyle.StatDict["Agility"])
+            if (Randomizer.Next(100) <= attack.Precision - Ennemy[0].EquippedStyle.StatDict["Agility"] + Party[0].EquippedStyle.StatDict["Agility"])
             {
+                DisplayTurnInfo(" used " + attack.Name + " on " + Ennemy[0].Name + " and dealt " + (Party[0].EquippedStyle.StatDict["Magic"] + Party[0].EquippedStyle.AttackList[0].DmgMax - Ennemy[0].EquippedStyle.StatDict["Willpower"]) + " damages.");
+                Party[0].SetMP(Party[0].EquippedStyle.AttackList[0].PMCost, this);
+                Ennemy[0].SetHP(Party[0].EquippedStyle.StatDict["Magic"] + Party[0].EquippedStyle.AttackList[0].DmgMax - Ennemy[0].EquippedStyle.StatDict["Willpower"], this);
                 Turn = (Turn + 1) % 2;
-                return true;
             }
+            else
+            {
+                Party[0].SetMP(Party[0].EquippedStyle.AttackList[0].PMCost, this);
+                DisplayTurnInfo(" missed his attack :( ");
+                Turn = (Turn + 1) % 2;
+            }
+        }
+
+        public void Change(Character character)
+        {
+            Party.Remove(character);
+            Party.Insert(0, character);
             Turn = (Turn + 1) % 2;
-            return false;
         }
 
         public void UseItem(Item item, Character user)
@@ -85,26 +132,51 @@ namespace The_seventh_yakuzer
 
         public void ChangeCharacter()
         {
-            if (Ennemy[0].PV == 0)
+
+            if (Ennemy.Count != 0)
             {
-                Program.gs.DisplayTurnInfo(this, " killed " + Ennemy[0]);
-                Ennemy.Remove(Ennemy[0]);
-                if (Ennemy.Count == 0)
+                if (Ennemy[0].PV == 0)
                 {
-                    Program.gs.DisplayTurnInfo(this, " won the fight. You win !!!");
-                    System.Threading.Thread.Sleep(2000);
-                    Program.changeMode(Program.GameModes.MAP, this);
+                    DisplayTurnInfo(" killed " + Ennemy[0].Name);
+                    Ennemy.Remove(Ennemy[0]);
+                    System.Threading.Thread.Sleep(1000);
+                    if (Ennemy.Count == 0)
+                    {
+                        DisplayTurnInfo(" won the fight. You win !!!");
+                        System.Threading.Thread.Sleep(2000);
+                        GameData.Kashiwagi.PV = GameData.Kashiwagi.EquippedStyle.StatDict["PV"];
+                        GameData.Kashiwagi.Status = new List<GameData.Status>() { GameData.Status.GOOD };
+                        Program.changeMode(Program.GameModes.MAP);
+                    }
                 }
             }
             if (Party[0].PV == 0)
             {
-                Program.gs.DisplayTurnInfo(this, " killed " + Party[0]);
+                DisplayTurnInfo(" killed " + Party[0].Name);
                 Party.Remove(Party[0]);
+                System.Threading.Thread.Sleep(1000);
                 if (Party.Count == 0)
                 {
-                    Program.gs.DisplayTurnInfo(this, " won the fight. You lost !!!");
+                    DisplayTurnInfo(" won the fight. You lost !!!");
                     Environment.Exit(0);
                 }
+            }
+        }
+        public void DisplayTurnInfo(string action)
+        {
+            if (Turn == 0)
+            {
+                Console.SetCursorPosition(21, 44);
+                Console.Write("                                                                            ");
+                Console.SetCursorPosition(21, 44);
+                Console.Write(Party[0].Name + action);
+            }
+            else
+            {
+                Console.SetCursorPosition(21, 39);
+                Console.Write("                                                                            ");
+                Console.SetCursorPosition(21, 39);
+                Console.Write(Ennemy[0].Name + action);
             }
         }
 

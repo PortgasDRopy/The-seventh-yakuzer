@@ -1,0 +1,180 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="The_seventh_yakuzer.Armor">
+    <Position X="6" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAAAAAAAAAAAAAAQAAAAAAAAAAAQAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Armor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="The_seventh_yakuzer.Attack">
+    <Position X="11.25" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAAAAAAAAAAAgAAQAAAAAAAAAAQBCAAAAEAI=</HashCode>
+      <FileName>Attack.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="The_seventh_yakuzer.Character">
+    <Position X="13.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAEJgAQAAAAQAAAIBQBAABAAACRASAYAAEAQAA=</HashCode>
+      <FileName>Character.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="The_seventh_yakuzer.Fight">
+    <Position X="15.25" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAQAA2AAAhAAAAAAAACAAAAAIAAAAAAAAAiAAAAAAI=</HashCode>
+      <FileName>Fight.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="The_seventh_yakuzer.GameData">
+    <Position X="16.75" Y="2" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="The_seventh_yakuzer.GameData.Type" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>GameData.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="The_seventh_yakuzer.GameData.Status" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>GameData.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="The_seventh_yakuzer.GameData.Weight" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>GameData.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="The_seventh_yakuzer.GameData.BodyPart" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>GameData.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>4KWAOCLkmZGQiJYAYGEMY6sgmPBJU5ADrgEBMpJGgGA=</HashCode>
+      <FileName>GameData.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="The_seventh_yakuzer.GameScreen">
+    <Position X="18.25" Y="2" Width="1.5" />
+    <NestedTypes>
+      <Struct Name="The_seventh_yakuzer.GameScreen.mapGrid" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>GameScreen.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>BqAABQAQAMKCCAgABQAJAQSiAAEAAgAACAACAwBwAAQ=</HashCode>
+      <FileName>GameScreen.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="The_seventh_yakuzer.GameState">
+    <Position X="20" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAQAAAAAAAAAAAAAAAAAAAAAAAABAAAAAECAggAAQA=</HashCode>
+      <FileName>GameState.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="The_seventh_yakuzer.Gear">
+    <Position X="7.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAQAAAAAAAAAAAQAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Gear.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="The_seventh_yakuzer.GoonBlunt">
+    <Position X="15" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Goons.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="The_seventh_yakuzer.GoonBlade">
+    <Position X="18" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Goons.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="The_seventh_yakuzer.GoonGun">
+    <Position X="7.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Goons.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="The_seventh_yakuzer.BigG">
+    <Position X="10.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Goons.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="The_seventh_yakuzer.Mage">
+    <Position X="12" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Goons.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="The_seventh_yakuzer.Archer">
+    <Position X="16.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Goons.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="The_seventh_yakuzer.Fighter">
+    <Position X="19.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Goons.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="The_seventh_yakuzer.WMaster">
+    <Position X="9" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Goons.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="The_seventh_yakuzer.Item">
+    <Position X="7.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAEAAAQAABAAAAAAAA=</HashCode>
+      <FileName>Item.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="The_seventh_yakuzer.Program">
+    <Position X="11.25" Y="5" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="The_seventh_yakuzer.Program.GameModes" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Program.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>gAAAAAAAAAAAAAAACAAAAAAAAAAAAAACAAAhBAAAAAA=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="The_seventh_yakuzer.Weapon">
+    <Position X="9" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAAAAAQAAAAAAAAAAAQAAAAQAAAAAAAAA=</HashCode>
+      <FileName>Weapon.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="The_seventh_yakuzer.WeaponType">
+    <Position X="20" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAACAAAAAQAQAAAAAAAAA=</HashCode>
+      <FileName>WeaponType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
